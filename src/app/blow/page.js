@@ -13,6 +13,7 @@ export default function BlowPage() {
   const errorTimeoutRef = useRef(null);
   const retryIntervalRef = useRef(null);
   const countdownIntervalRef = useRef(null);
+  const resetTriggeredRef = useRef(false);
   const [errorCountdown, setErrorCountdown] = useState(null);
 
   useEffect(() => {
@@ -40,14 +41,14 @@ export default function BlowPage() {
     };
 
     if (sensorState === "error") {
-      if (!errorTimeoutRef.current) {
+      if (!errorTimeoutRef.current && !resetTriggeredRef.current) {
         setErrorCountdown(10);
         sendCommand("START_TEST");
 
         countdownIntervalRef.current = setInterval(() => {
           setErrorCountdown((prev) => {
             if (prev === null) return null;
-            return prev > 0 ? prev - 1 : 0;
+            return prev > 0 ? prev - 1 : prev;
           });
         }, 1000);
 
@@ -57,11 +58,13 @@ export default function BlowPage() {
 
         errorTimeoutRef.current = setTimeout(() => {
           clearErrorTimers();
+          resetTriggeredRef.current = true;
           sendCommand("RESET");
-          router.push("/");
+          router.replace("/");
         }, 10000);
       }
     } else {
+      resetTriggeredRef.current = false;
       clearErrorTimers();
     }
 
