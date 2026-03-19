@@ -13,8 +13,14 @@ export default function BlowPage() {
   const errorTimeoutRef = useRef(null);
   const retryIntervalRef = useRef(null);
   const countdownIntervalRef = useRef(null);
-  const resetTriggeredRef = useRef(false);
   const [errorCountdown, setErrorCountdown] = useState(null);
+
+  const stopErrorTimers = () => {
+    if (errorTimeoutRef.current) { clearTimeout(errorTimeoutRef.current); errorTimeoutRef.current = null; }
+    if (retryIntervalRef.current) { clearInterval(retryIntervalRef.current); retryIntervalRef.current = null; }
+    if (countdownIntervalRef.current) { clearInterval(countdownIntervalRef.current); countdownIntervalRef.current = null; }
+    setErrorCountdown(null);
+  };
 
   useEffect(() => {
     if (testResult && testResult.success && !navigatedRef.current) {
@@ -24,54 +30,33 @@ export default function BlowPage() {
   }, [testResult, router]);
 
   useEffect(() => {
-    const clearErrorTimers = () => {
-      if (errorTimeoutRef.current) {
-        clearTimeout(errorTimeoutRef.current);
-        errorTimeoutRef.current = null;
-      }
-      if (retryIntervalRef.current) {
-        clearInterval(retryIntervalRef.current);
-        retryIntervalRef.current = null;
-      }
-      if (countdownIntervalRef.current) {
-        clearInterval(countdownIntervalRef.current);
-        countdownIntervalRef.current = null;
-      }
-      setErrorCountdown(null);
-    };
-
     if (sensorState === "error") {
-      if (!errorTimeoutRef.current && !resetTriggeredRef.current) {
-        setErrorCountdown(10);
+      if (errorTimeoutRef.current) return; // already counting
+
+      setErrorCountdown(10);
+      sendCommand("START_TEST");
+
+      countdownIntervalRef.current = setInterval(() => {
+        setErrorCountdown((prev) => (prev !== null && prev > 0 ? prev - 1 : prev));
+      }, 1000);
+
+      retryIntervalRef.current = setInterval(() => {
         sendCommand("START_TEST");
+      }, 2000);
 
-        countdownIntervalRef.current = setInterval(() => {
-          setErrorCountdown((prev) => {
-            if (prev === null) return null;
-            return prev > 0 ? prev - 1 : prev;
-          });
-        }, 1000);
-
-        retryIntervalRef.current = setInterval(() => {
-          sendCommand("START_TEST");
-        }, 2000);
-
-        errorTimeoutRef.current = setTimeout(() => {
-          clearErrorTimers();
-          resetTriggeredRef.current = true;
-          sendCommand("RESET");
-          router.replace("/");
-        }, 10000);
-      }
+      errorTimeoutRef.current = setTimeout(() => {
+        stopErrorTimers();
+        sendCommand("RESET");
+        router.replace("/");
+      }, 10000);
     } else {
-      resetTriggeredRef.current = false;
-      clearErrorTimers();
+      stopErrorTimers();
     }
+  }, [sensorState]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    return () => {
-      clearErrorTimers();
-    };
-  }, [sensorState, sendCommand, router]);
+  useEffect(() => {
+    return () => stopErrorTimers();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <main className="flex h-screen w-screen overflow-hidden">
