@@ -6,20 +6,48 @@ import AdPanel from "../components/AdPanel";
 import BlowPanel from "../components/BlowPanel";
 import { useKioskContext } from "@/context/KioskContext";
 
+const MAX_ERROR_RETRY = 5;
+
 export default function BlowPage() {
   const router = useRouter();
   const { sensorState, testResult, sendCommand } = useKioskContext();
   const navigatedRef = useRef(false);
-  const errorTimeoutRef = useRef(null);
   const retryIntervalRef = useRef(null);
-  const countdownIntervalRef = useRef(null);
-  const [errorCountdown, setErrorCountdown] = useState(null);
+  const errorActiveRef = useRef(false);
+  const resetTriggeredRef = useRef(false);
+  const attemptCountRef = useRef(0);
+  const [errorAttempt, setErrorAttempt] = useState(null);
 
   const stopErrorTimers = () => {
-    if (errorTimeoutRef.current) { clearTimeout(errorTimeoutRef.current); errorTimeoutRef.current = null; }
     if (retryIntervalRef.current) { clearInterval(retryIntervalRef.current); retryIntervalRef.current = null; }
-    if (countdownIntervalRef.current) { clearInterval(countdownIntervalRef.current); countdownIntervalRef.current = null; }
-    setErrorCountdown(null);
+    setErrorAttempt(null);
+    errorActiveRef.current = false;
+  };
+
+  const triggerReset = () => {
+    if (resetTriggeredRef.current) return;
+    resetTriggeredRef.current = true;
+    stopErrorTimers();
+    sendCommand("RESET");
+    router.replace("/");
+  };
+
+  const startErrorRecovery = () => {
+    errorActiveRef.current = true;
+    resetTriggeredRef.current = false;
+    attemptCountRef.current = 1;
+    setErrorAttempt(1);
+    sendCommand("START_TEST");
+
+    retryIntervalRef.current = setInterval(() => {
+      attemptCountRef.current += 1;
+      if (attemptCountRef.current > MAX_ERROR_RETRY) {
+        triggerReset();
+        return;
+      }
+      setErrorAttempt(attemptCountRef.current);
+      sendCommand("START_TEST");
+    }, 2000);
   };
 
   useEffect(() => {
@@ -31,31 +59,25 @@ export default function BlowPage() {
 
   useEffect(() => {
     if (sensorState === "error") {
-      if (errorTimeoutRef.current) return; // already counting
-
-      setErrorCountdown(10);
-      sendCommand("START_TEST");
-
-      countdownIntervalRef.current = setInterval(() => {
-        setErrorCountdown((prev) => (prev !== null && prev > 0 ? prev - 1 : prev));
-      }, 1000);
-
-      retryIntervalRef.current = setInterval(() => {
-        sendCommand("START_TEST");
-      }, 2000);
-
-      errorTimeoutRef.current = setTimeout(() => {
-        stopErrorTimers();
-        sendCommand("RESET");
-        router.replace("/");
-      }, 10000);
-    } else {
-      stopErrorTimers();
+      if (!errorActiveRef.current) {
+        startErrorRecovery();
+      }
+      return;
     }
-  }, [sensorState]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    const RECOVERY_SUCCESS_STATES = new Set(["ready", "breath_detected", "sampling", "analyzing", "flow_error"]);
+    if (errorActiveRef.current && RECOVERY_SUCCESS_STATES.has(sensorState)) {
+      stopErrorTimers();
+      resetTriggeredRef.current = false;
+      attemptCountRef.current = 0;
+    }
+  }, [sensorState]);
 
   useEffect(() => {
-    return () => stopErrorTimers();
+    return () => {
+      stopErrorTimers();
+      resetTriggeredRef.current = false;
+    };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
@@ -64,7 +86,7 @@ export default function BlowPage() {
         <AdPanel />
       </div>
       <div className="w-[30%]">
-        <BlowPanel sensorState={sensorState} errorCountdown={errorCountdown} />
+        <BlowPanel sensorState={sensorState} errorAttempt={errorAttempt} maxRetry={MAX_ERROR_RETRY} />
       </div>
     </main>
   );
