@@ -72,6 +72,9 @@ export function useKiosk() {
       }
 
       if (type === "alcohol_state") {
+        if (data.state === "connecting" || data.state === "warming_up") {
+          setTestResult(null);
+        }
         setSensorState(data.state);
         if (data.message) setSensorMessage(data.message);
         console.log("[WS] Sensor state:", data.state);
