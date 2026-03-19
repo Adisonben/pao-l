@@ -8,17 +8,15 @@ const WS_URL =
 const RECONNECT_DELAY_MS = 3000;
 
 /**
- * useKiosk — WebSocket connection to the Pao-L backend.
+ * useKiosk — WebSocket connection to the Pao-L backend (slim).
  *
  * Returns:
- *   kioskState   — current kiosk state machine state (e.g. "IDLE", "READY_TO_BLOW")
- *   kioskUpdate  — latest sensor-level update (e.g. "WARMING_UP", "READY_TO_BLOW")
- *   testResult   — { value, status, success } from the last test_result event
- *   deviceStatus — { alcohol, fingerprint, printer, camera } status strings
- *   sessionId    — active session ID or null
- *   wsConnected  — whether the WebSocket is currently open
- *   sendCommand  — fn(cmd: string) sends {"command": cmd} to the backend
- *   lastEvent    — the raw last event object received
+ *   wsConnected   — whether the WebSocket is currently open
+ *   sensorState   — latest alcohol sensor state (e.g. "connecting", "warming_up", "ready", "error")
+ *   sensorMessage — Thai/English status message from the sensor
+ *   testResult    — { value, status, success } from the alcohol_result event
+ *   lastEvent     — the raw last event object received
+ *   sendCommand   — fn(cmd: string) sends {"command": cmd} to the backend
  */
 export function useKiosk() {
   const wsRef = useRef(null);
@@ -26,11 +24,9 @@ export function useKiosk() {
   const mountedRef = useRef(true);
 
   const [wsConnected, setWsConnected] = useState(false);
-  const [kioskState, setKioskState] = useState("IDLE");
-  const [kioskUpdate, setKioskUpdate] = useState(null);
+  const [sensorState, setSensorState] = useState(null);
+  const [sensorMessage, setSensorMessage] = useState(null);
   const [testResult, setTestResult] = useState(null);
-  const [deviceStatus, setDeviceStatus] = useState({});
-  const [sessionId, setSessionId] = useState(null);
   const [lastEvent, setLastEvent] = useState(null);
 
   const connect = useCallback(() => {
@@ -53,9 +49,9 @@ export function useKiosk() {
       let data;
       try {
         data = JSON.parse(evt.data);
-        console.log("Received message:", data);
+        console.log("[WS] Received:", data);
       } catch {
-        console.error("Failed to parse message:", evt.data);
+        console.error("[WS] Failed to parse:", evt.data);
         return;
       }
 
@@ -67,54 +63,28 @@ export function useKiosk() {
         if (ws.readyState === WebSocket.OPEN) {
           ws.send(JSON.stringify({ command: "pong" }));
         }
-        console.log("Ping received, sending pong");
         return;
       }
 
-      if (type === "kiosk_state") {
-        setKioskState(data.state);
-        if (data.session_id) setSessionId(data.session_id);
-        console.log("Kiosk state updated:", data.state);
+      if (type === "ready") {
+        console.log("[WS] Backend ready");
         return;
       }
 
-      if (type === "kiosk_update") {
-        setKioskUpdate(data.state);
-        if (data.session_id) setSessionId(data.session_id);
-        console.log("Kiosk update received:", data.state);
+      if (type === "alcohol_state") {
+        setSensorState(data.state);
+        if (data.message) setSensorMessage(data.message);
+        console.log("[WS] Sensor state:", data.state);
         return;
       }
 
-      if (type === "test_result") {
+      if (type === "alcohol_result") {
         setTestResult({
           value: data.value,
           status: data.status,
           success: data.success,
-          session_id: data.session_id,
         });
-        console.log("Test result received:", data);
-        return;
-      }
-
-      if (type === "device_status") {
-        setDeviceStatus((prev) => ({
-          ...prev,
-          [data.device]: data.status,
-        }));
-        console.log("Device status updated:", data.device, data.status);
-        return;
-      }
-
-      if (type === "session_started") {
-        setSessionId(data.session_id);
-        setTestResult(null);
-        setKioskUpdate(null);
-        console.log("Session started:", data.session_id);
-        return;
-      }
-
-      if (type === "session_ended") {
-        console.log("Session ended");
+        console.log("[WS] Test result:", data);
         return;
       }
     };
@@ -154,11 +124,9 @@ export function useKiosk() {
 
   return {
     wsConnected,
-    kioskState,
-    kioskUpdate,
+    sensorState,
+    sensorMessage,
     testResult,
-    deviceStatus,
-    sessionId,
     lastEvent,
     sendCommand,
   };

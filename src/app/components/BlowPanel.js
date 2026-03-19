@@ -6,37 +6,38 @@ import { useRouter } from "next/navigation";
 import { useGlobalSound } from "@/hooks/useGlobalSound";
 
 /**
- * kioskUpdate values from backend:
- *   CONNECTING, WARMING_UP → "preparing"
- *   READY_TO_BLOW          → "ready"
- *   BLOWING                → "blowing"
- *   FLOW_ERROR             → "flow_error"
- *   TIMEOUT, ERROR         → "error"
+ * sensorState values from backend alcohol_state events:
+ *   connecting, warming_up → "preparing"
+ *   ready                  → "ready"
+ *   sampling, breath_detected → "blowing"
+ *   flow_error             → "flow_error"
+ *   timeout, error         → "error"
  */
 const PHASES = {
   preparing:  { label: "กำลังเตรียมพร้อม...", color: "text-zinc-400", iconColor: "#71717a" },
   ready:      { label: "พร้อมแล้ว — เป่าลมได้เลย", color: "text-yellow-400", iconColor: "#facc15" },
   blowing:    { label: "ตรวจพบลมหายใจ...", color: "text-blue-400", iconColor: "#60a5fa" },
   flow_error: { label: "เป่าไม่ถูกต้อง กรุณาลองใหม่", color: "text-red-400", iconColor: "#f87171" },
-  error:      { label: "เกิดข้อผิดพลาด กรุณารอสักครู่", color: "text-red-500", iconColor: "#ef4444" },
+  error:      { label: "เชื่อมต่อ hardware ล้มเหลว", color: "text-red-500", iconColor: "#ef4444" },
 };
 
-function kioskUpdateToPhase(kioskUpdate) {
-  switch (kioskUpdate) {
-    case "READY_TO_BLOW": return "ready";
-    case "BLOWING":       return "blowing";
-    case "FLOW_ERROR":    return "flow_error";
-    case "TIMEOUT":
-    case "ERROR":         return "error";
-    case "CONNECTING":
-    case "WARMING_UP":
-    default:              return "preparing";
+function sensorStateToPhase(sensorState) {
+  switch (sensorState) {
+    case "ready":           return "ready";
+    case "sampling":
+    case "breath_detected": return "blowing";
+    case "flow_error":      return "flow_error";
+    case "timeout":
+    case "error":           return "error";
+    case "connecting":
+    case "warming_up":
+    default:                return "preparing";
   }
 }
 
-export default function BlowPanel({ kioskUpdate, sendCommand }) {
+export default function BlowPanel({ sensorState }) {
   const router = useRouter();
-  const phase = kioskUpdateToPhase(kioskUpdate);
+  const phase = sensorStateToPhase(sensorState);
   const { playSound } = useGlobalSound();
 
   useEffect(() => {

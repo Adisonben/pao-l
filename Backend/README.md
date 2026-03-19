@@ -70,3 +70,6 @@ Fix USB permission
 # other
 - Check detection: `lsusb`
 - use GPIO `pip install RPi.GPIO`
+
+ถูกตัดออก (ไม่ได้ import อีกต่อไป)
+Watchdog, DeviceManager, KioskController, SessionManager, UIEventAdapter, REST API, FingerprintService

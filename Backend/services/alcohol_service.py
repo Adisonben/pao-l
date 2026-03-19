@@ -83,8 +83,8 @@ class AlcoholService:
     # ── Health (for Watchdog) ─────────────────────────────────
 
     def is_alive(self) -> bool:
-        """True if the worker thread is running."""
-        return self._worker_thread is not None and self._worker_thread.is_alive()
+        """True if the command listener task is running (idle = healthy)."""
+        return self._cmd_listener_task is not None and not self._cmd_listener_task.done()
 
     def is_connected(self) -> bool:
         """True if the serial port is currently open."""
