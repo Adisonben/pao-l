@@ -53,7 +53,9 @@ export function useKiosk() {
       let data;
       try {
         data = JSON.parse(evt.data);
+        console.log("Received message:", data);
       } catch {
+        console.error("Failed to parse message:", evt.data);
         return;
       }
 
@@ -65,18 +67,21 @@ export function useKiosk() {
         if (ws.readyState === WebSocket.OPEN) {
           ws.send(JSON.stringify({ command: "pong" }));
         }
+        console.log("Ping received, sending pong");
         return;
       }
 
       if (type === "kiosk_state") {
         setKioskState(data.state);
         if (data.session_id) setSessionId(data.session_id);
+        console.log("Kiosk state updated:", data.state);
         return;
       }
 
       if (type === "kiosk_update") {
         setKioskUpdate(data.state);
         if (data.session_id) setSessionId(data.session_id);
+        console.log("Kiosk update received:", data.state);
         return;
       }
 
@@ -87,6 +92,7 @@ export function useKiosk() {
           success: data.success,
           session_id: data.session_id,
         });
+        console.log("Test result received:", data);
         return;
       }
 
@@ -95,6 +101,7 @@ export function useKiosk() {
           ...prev,
           [data.device]: data.status,
         }));
+        console.log("Device status updated:", data.device, data.status);
         return;
       }
 
@@ -102,10 +109,12 @@ export function useKiosk() {
         setSessionId(data.session_id);
         setTestResult(null);
         setKioskUpdate(null);
+        console.log("Session started:", data.session_id);
         return;
       }
 
       if (type === "session_ended") {
+        console.log("Session ended");
         return;
       }
     };
