@@ -58,7 +58,7 @@ export default function BlowPage() {
   }, [testResult, router]);
 
   useEffect(() => {
-    if (sensorState === "error") {
+    if (sensorState === "error" || sensorState === "timeout") {
       if (!errorActiveRef.current) {
         startErrorRecovery();
       }
