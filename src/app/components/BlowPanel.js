@@ -35,7 +35,7 @@ function sensorStateToPhase(sensorState) {
   }
 }
 
-export default function BlowPanel({ sensorState }) {
+export default function BlowPanel({ sensorState, errorCountdown = null }) {
   const router = useRouter();
   const phase = sensorStateToPhase(sensorState);
   const { playSound } = useGlobalSound();
@@ -103,10 +103,10 @@ export default function BlowPanel({ sensorState }) {
           </AnimatePresence>
         </div>
 
-        <AnimatePresence>
-          {phase === "ready" && (
+        <AnimatePresence mode="wait">
+          {phase === "ready" ? (
             <motion.p
-              key="hint"
+              key="hint-ready"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -114,7 +114,17 @@ export default function BlowPanel({ sensorState }) {
             >
               กรุณาเป่าลมเข้าท่อ
             </motion.p>
-          )}
+          ) : errorCountdown !== null ? (
+            <motion.p
+              key="hint-error"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="text-xs text-red-400"
+            >
+              จะกลับหน้าหลักใน {errorCountdown} วินาที หากยังเชื่อมต่อไม่ได้
+            </motion.p>
+          ) : null}
         </AnimatePresence>
       </div>
 
