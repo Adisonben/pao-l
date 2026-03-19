@@ -7,7 +7,7 @@ import { useGlobalSound } from "@/hooks/useGlobalSound";
 
 const COUNTDOWN_SEC = 6;
 
-export default function ResultPanel({ result = "pass", onDone }) {
+export default function ResultPanel({ result = "pass", value = null, onDone }) {
   const router = useRouter();
   const [countdown, setCountdown] = useState(COUNTDOWN_SEC);
   const isPass = result === "pass";
@@ -69,6 +69,20 @@ export default function ResultPanel({ result = "pass", onDone }) {
         >
           {isPass ? "Pass" : "Fail"}
         </motion.span>
+
+        {value !== null && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.65, type: "spring", stiffness: 200, damping: 20 }}
+            className="flex flex-col items-center gap-0.5"
+          >
+            <span className={`text-3xl font-black tabular-nums ${isPass ? "text-green-400" : "text-red-400"}`}>
+              {value.toFixed(3)}
+            </span>
+            <span className="text-xs text-zinc-500 tracking-widest uppercase">mg/100ml</span>
+          </motion.div>
+        )}
 
         <motion.p
           initial={{ opacity: 0 }}

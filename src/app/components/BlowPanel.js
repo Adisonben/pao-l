@@ -1,33 +1,49 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useGlobalSound } from "@/hooks/useGlobalSound";
 
+/**
+ * kioskUpdate values from backend:
+ *   CONNECTING, WARMING_UP → "preparing"
+ *   READY_TO_BLOW          → "ready"
+ *   BLOWING                → "blowing"
+ *   FLOW_ERROR             → "flow_error"
+ *   TIMEOUT, ERROR         → "error"
+ */
 const PHASES = {
-  preparing: { label: "กำลังเตรียมพร้อม...", color: "text-zinc-400", iconColor: "#71717a", duration: 2500 },
-  ready:     { label: "พร้อมแล้ว — เป่าลมได้เลย", color: "text-yellow-400", iconColor: "#facc15", duration: null },
+  preparing:  { label: "กำลังเตรียมพร้อม...", color: "text-zinc-400", iconColor: "#71717a" },
+  ready:      { label: "พร้อมแล้ว — เป่าลมได้เลย", color: "text-yellow-400", iconColor: "#facc15" },
+  blowing:    { label: "ตรวจพบลมหายใจ...", color: "text-blue-400", iconColor: "#60a5fa" },
+  flow_error: { label: "เป่าไม่ถูกต้อง กรุณาลองใหม่", color: "text-red-400", iconColor: "#f87171" },
+  error:      { label: "เกิดข้อผิดพลาด กรุณารอสักครู่", color: "text-red-500", iconColor: "#ef4444" },
 };
 
-export default function BlowPanel({ onBlowStart }) {
+function kioskUpdateToPhase(kioskUpdate) {
+  switch (kioskUpdate) {
+    case "READY_TO_BLOW": return "ready";
+    case "BLOWING":       return "blowing";
+    case "FLOW_ERROR":    return "flow_error";
+    case "TIMEOUT":
+    case "ERROR":         return "error";
+    case "CONNECTING":
+    case "WARMING_UP":
+    default:              return "preparing";
+  }
+}
+
+export default function BlowPanel({ kioskUpdate, sendCommand }) {
   const router = useRouter();
-  const [phase, setPhase] = useState("preparing");
-  
+  const phase = kioskUpdateToPhase(kioskUpdate);
   const { playSound } = useGlobalSound();
-  
+
   useEffect(() => {
     playSound("/sounds/voice_breathing.mp3");
   }, [playSound]);
 
-  useEffect(() => {
-    const { duration } = PHASES[phase];
-    if (!duration) return;
-    const t = setTimeout(() => setPhase("ready"), duration);
-    return () => clearTimeout(t);
-  }, [phase]);
-
-  const current = PHASES[phase];
+  const current = PHASES[phase] ?? PHASES.preparing;
 
   return (
     <div className="flex h-screen flex-col bg-[#0f0f0f]">
@@ -59,7 +75,6 @@ export default function BlowPanel({ onBlowStart }) {
       {/* ── MAIN ── */}
       <div className="flex flex-1 flex-col items-center justify-center gap-6 px-8 text-center">
         <motion.div
-          onClick={() => phase === "ready" && onBlowStart?.()}
           animate={
             phase === "ready"
               ? { scale: [1, 1.08, 1], transition: { repeat: Infinity, duration: 1.6, ease: "easeInOut" } }
@@ -67,7 +82,6 @@ export default function BlowPanel({ onBlowStart }) {
           }
           style={{
             filter: phase === "ready" ? `drop-shadow(0 0 18px ${current.iconColor}88)` : "none",
-            cursor: phase === "ready" ? "pointer" : "default",
           }}
         >
           <BlowIcon color={current.iconColor} />
@@ -97,7 +111,7 @@ export default function BlowPanel({ onBlowStart }) {
               exit={{ opacity: 0 }}
               className="text-xs text-zinc-600"
             >
-              แตะไอคอนเพื่อเริ่มเป่า
+              กรุณาเป่าลมเข้าท่อ
             </motion.p>
           )}
         </AnimatePresence>

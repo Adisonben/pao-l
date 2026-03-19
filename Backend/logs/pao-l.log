@@ -1,0 +1,96 @@
+{"ts": "2026-03-16T07:41:34.502241+00:00", "level": "DEBUG", "logger": "asyncio", "message": "Using proactor: IocpProactor"}
+{"ts": "2026-03-16T07:41:34.526880+00:00", "level": "INFO", "logger": "__main__", "message": "=== Pao-L Backend starting ==="}
+{"ts": "2026-03-16T07:41:34.527247+00:00", "level": "INFO", "logger": "core.device_manager", "message": "DeviceManager: registered 'alcohol'"}
+{"ts": "2026-03-16T07:41:34.527544+00:00", "level": "INFO", "logger": "core.device_manager", "message": "DeviceManager: registered 'fingerprint'"}
+{"ts": "2026-03-16T07:41:34.527761+00:00", "level": "INFO", "logger": "core.device_manager", "message": "DeviceManager: registered 'printer'"}
+{"ts": "2026-03-16T07:41:34.527974+00:00", "level": "INFO", "logger": "core.device_manager", "message": "DeviceManager: registered 'camera'"}
+{"ts": "2026-03-16T07:41:34.528307+00:00", "level": "DEBUG", "logger": "core.command_bus", "message": "CommandBus: new subscriber filter=frozenset({'RESET', 'START_ALCOHOL', 'STOP_ALCOHOL'}) (total=1)"}
+{"ts": "2026-03-16T07:41:34.528517+00:00", "level": "INFO", "logger": "services.alcohol_service", "message": "AlcoholService started"}
+{"ts": "2026-03-16T07:41:34.528668+00:00", "level": "INFO", "logger": "core.device_manager", "message": "DeviceManager: started 'alcohol' (status=disconnected)"}
+{"ts": "2026-03-16T07:41:34.528864+00:00", "level": "INFO", "logger": "services.fingerprint_service", "message": "FingerprintService started"}
+{"ts": "2026-03-16T07:41:34.529083+00:00", "level": "INFO", "logger": "core.device_manager", "message": "DeviceManager: started 'fingerprint' (status=disconnected)"}
+{"ts": "2026-03-16T07:41:34.529243+00:00", "level": "DEBUG", "logger": "core.command_bus", "message": "CommandBus: new subscriber filter=frozenset({'PRINT_RECEIPT'}) (total=2)"}
+{"ts": "2026-03-16T07:41:34.529391+00:00", "level": "INFO", "logger": "services.printer_service", "message": "PrinterService started"}
+{"ts": "2026-03-16T07:41:34.529542+00:00", "level": "INFO", "logger": "core.device_manager", "message": "DeviceManager: started 'printer' (status=connected)"}
+{"ts": "2026-03-16T07:41:34.529705+00:00", "level": "DEBUG", "logger": "core.command_bus", "message": "CommandBus: new subscriber filter=frozenset({'CAPTURE_PHOTO'}) (total=3)"}
+{"ts": "2026-03-16T07:41:34.529865+00:00", "level": "INFO", "logger": "services.camera_service", "message": "CameraService started"}
+{"ts": "2026-03-16T07:41:34.530006+00:00", "level": "INFO", "logger": "core.device_manager", "message": "DeviceManager: started 'camera' (status=disconnected)"}
+{"ts": "2026-03-16T07:41:34.530193+00:00", "level": "DEBUG", "logger": "core.event_bus", "message": "EventBus: new subscriber (total=1)"}
+{"ts": "2026-03-16T07:41:34.530339+00:00", "level": "INFO", "logger": "controller.kiosk_controller", "message": "KioskController started (state=IDLE)"}
+{"ts": "2026-03-16T07:41:34.530498+00:00", "level": "DEBUG", "logger": "core.event_bus", "message": "EventBus: new subscriber (total=2)"}
+{"ts": "2026-03-16T07:41:34.530674+00:00", "level": "INFO", "logger": "adapters.ui_event_adapter", "message": "UIEventAdapter started"}
+{"ts": "2026-03-16T07:41:34.530802+00:00", "level": "INFO", "logger": "core.watchdog", "message": "Watchdog started (interval=5.0s)"}
+{"ts": "2026-03-16T07:41:34.530995+00:00", "level": "INFO", "logger": "__main__", "message": "=== Pao-L Backend ready ==="}
+{"ts": "2026-03-16T07:41:39.533372+00:00", "level": "WARNING", "logger": "core.watchdog", "message": "Watchdog: 'alcohol' is not alive — attempting restart"}
+{"ts": "2026-03-16T07:41:39.535441+00:00", "level": "INFO", "logger": "core.device_manager", "message": "DeviceManager: restarting 'alcohol'"}
+{"ts": "2026-03-16T07:41:39.536308+00:00", "level": "INFO", "logger": "services.alcohol_service", "message": "AlcoholService: measurement stopped"}
+{"ts": "2026-03-16T07:41:39.537303+00:00", "level": "DEBUG", "logger": "core.command_bus", "message": "CommandBus: removed subscriber (total=2)"}
+{"ts": "2026-03-16T07:41:39.537633+00:00", "level": "INFO", "logger": "services.alcohol_service", "message": "AlcoholService stopped"}
+{"ts": "2026-03-16T07:41:39.537864+00:00", "level": "DEBUG", "logger": "core.command_bus", "message": "CommandBus: new subscriber filter=frozenset({'RESET', 'START_ALCOHOL', 'STOP_ALCOHOL'}) (total=3)"}
+{"ts": "2026-03-16T07:41:39.538467+00:00", "level": "INFO", "logger": "services.alcohol_service", "message": "AlcoholService started"}
+{"ts": "2026-03-16T07:41:39.539175+00:00", "level": "INFO", "logger": "core.device_manager", "message": "DeviceManager: restarted 'alcohol' (status=disconnected)"}
+{"ts": "2026-03-16T07:41:39.539938+00:00", "level": "ERROR", "logger": "core.watchdog", "message": "Watchdog: 'alcohol' restart failed"}
+{"ts": "2026-03-16T07:41:44.551795+00:00", "level": "WARNING", "logger": "core.watchdog", "message": "Watchdog: 'alcohol' is not alive — attempting restart"}
+{"ts": "2026-03-16T07:41:44.552416+00:00", "level": "INFO", "logger": "core.device_manager", "message": "DeviceManager: restarting 'alcohol'"}
+{"ts": "2026-03-16T07:41:44.552910+00:00", "level": "INFO", "logger": "services.alcohol_service", "message": "AlcoholService: measurement stopped"}
+{"ts": "2026-03-16T07:41:44.553564+00:00", "level": "DEBUG", "logger": "core.command_bus", "message": "CommandBus: removed subscriber (total=2)"}
+{"ts": "2026-03-16T07:41:44.554007+00:00", "level": "INFO", "logger": "services.alcohol_service", "message": "AlcoholService stopped"}
+{"ts": "2026-03-16T07:41:44.554239+00:00", "level": "DEBUG", "logger": "core.command_bus", "message": "CommandBus: new subscriber filter=frozenset({'RESET', 'START_ALCOHOL', 'STOP_ALCOHOL'}) (total=3)"}
+{"ts": "2026-03-16T07:41:44.554503+00:00", "level": "INFO", "logger": "services.alcohol_service", "message": "AlcoholService started"}
+{"ts": "2026-03-16T07:41:44.554654+00:00", "level": "INFO", "logger": "core.device_manager", "message": "DeviceManager: restarted 'alcohol' (status=disconnected)"}
+{"ts": "2026-03-16T07:41:44.554790+00:00", "level": "ERROR", "logger": "core.watchdog", "message": "Watchdog: 'alcohol' restart failed"}
+{"ts": "2026-03-16T07:41:49.565800+00:00", "level": "WARNING", "logger": "core.watchdog", "message": "Watchdog: 'alcohol' is not alive — attempting restart"}
+{"ts": "2026-03-16T07:41:49.566402+00:00", "level": "INFO", "logger": "core.device_manager", "message": "DeviceManager: restarting 'alcohol'"}
+{"ts": "2026-03-16T07:41:49.567066+00:00", "level": "INFO", "logger": "services.alcohol_service", "message": "AlcoholService: measurement stopped"}
+{"ts": "2026-03-16T07:41:49.567598+00:00", "level": "DEBUG", "logger": "core.command_bus", "message": "CommandBus: removed subscriber (total=2)"}
+{"ts": "2026-03-16T07:41:49.568276+00:00", "level": "INFO", "logger": "services.alcohol_service", "message": "AlcoholService stopped"}
+{"ts": "2026-03-16T07:41:49.568953+00:00", "level": "DEBUG", "logger": "core.command_bus", "message": "CommandBus: new subscriber filter=frozenset({'RESET', 'START_ALCOHOL', 'STOP_ALCOHOL'}) (total=3)"}
+{"ts": "2026-03-16T07:41:49.569453+00:00", "level": "INFO", "logger": "services.alcohol_service", "message": "AlcoholService started"}
+{"ts": "2026-03-16T07:41:49.569947+00:00", "level": "INFO", "logger": "core.device_manager", "message": "DeviceManager: restarted 'alcohol' (status=disconnected)"}
+{"ts": "2026-03-16T07:41:49.570593+00:00", "level": "ERROR", "logger": "core.watchdog", "message": "Watchdog: 'alcohol' restart failed"}
+{"ts": "2026-03-16T07:41:54.584494+00:00", "level": "WARNING", "logger": "core.watchdog", "message": "Watchdog: 'alcohol' is not alive — attempting restart"}
+{"ts": "2026-03-16T07:41:54.585699+00:00", "level": "INFO", "logger": "core.device_manager", "message": "DeviceManager: restarting 'alcohol'"}
+{"ts": "2026-03-16T07:41:54.587015+00:00", "level": "INFO", "logger": "services.alcohol_service", "message": "AlcoholService: measurement stopped"}
+{"ts": "2026-03-16T07:41:54.588313+00:00", "level": "DEBUG", "logger": "core.command_bus", "message": "CommandBus: removed subscriber (total=2)"}
+{"ts": "2026-03-16T07:41:54.589272+00:00", "level": "INFO", "logger": "services.alcohol_service", "message": "AlcoholService stopped"}
+{"ts": "2026-03-16T07:41:54.590254+00:00", "level": "DEBUG", "logger": "core.command_bus", "message": "CommandBus: new subscriber filter=frozenset({'RESET', 'START_ALCOHOL', 'STOP_ALCOHOL'}) (total=3)"}
+{"ts": "2026-03-16T07:41:54.590645+00:00", "level": "INFO", "logger": "services.alcohol_service", "message": "AlcoholService started"}
+{"ts": "2026-03-16T07:41:54.591036+00:00", "level": "INFO", "logger": "core.device_manager", "message": "DeviceManager: restarted 'alcohol' (status=disconnected)"}
+{"ts": "2026-03-16T07:41:54.591542+00:00", "level": "ERROR", "logger": "core.watchdog", "message": "Watchdog: 'alcohol' restart failed"}
+{"ts": "2026-03-16T07:41:59.604151+00:00", "level": "WARNING", "logger": "core.watchdog", "message": "Watchdog: 'alcohol' is not alive — attempting restart"}
+{"ts": "2026-03-16T07:41:59.605495+00:00", "level": "INFO", "logger": "core.device_manager", "message": "DeviceManager: restarting 'alcohol'"}
+{"ts": "2026-03-16T07:41:59.606499+00:00", "level": "INFO", "logger": "services.alcohol_service", "message": "AlcoholService: measurement stopped"}
+{"ts": "2026-03-16T07:41:59.607365+00:00", "level": "DEBUG", "logger": "core.command_bus", "message": "CommandBus: removed subscriber (total=2)"}
+{"ts": "2026-03-16T07:41:59.607671+00:00", "level": "INFO", "logger": "services.alcohol_service", "message": "AlcoholService stopped"}
+{"ts": "2026-03-16T07:41:59.608064+00:00", "level": "DEBUG", "logger": "core.command_bus", "message": "CommandBus: new subscriber filter=frozenset({'RESET', 'START_ALCOHOL', 'STOP_ALCOHOL'}) (total=3)"}
+{"ts": "2026-03-16T07:41:59.609297+00:00", "level": "INFO", "logger": "services.alcohol_service", "message": "AlcoholService started"}
+{"ts": "2026-03-16T07:41:59.609958+00:00", "level": "INFO", "logger": "core.device_manager", "message": "DeviceManager: restarted 'alcohol' (status=disconnected)"}
+{"ts": "2026-03-16T07:41:59.611072+00:00", "level": "ERROR", "logger": "core.watchdog", "message": "Watchdog: 'alcohol' restart failed"}
+{"ts": "2026-03-16T07:42:04.614242+00:00", "level": "WARNING", "logger": "core.watchdog", "message": "Watchdog: 'alcohol' is not alive — attempting restart"}
+{"ts": "2026-03-16T07:42:04.615318+00:00", "level": "INFO", "logger": "core.device_manager", "message": "DeviceManager: restarting 'alcohol'"}
+{"ts": "2026-03-16T07:42:04.615713+00:00", "level": "INFO", "logger": "services.alcohol_service", "message": "AlcoholService: measurement stopped"}
+{"ts": "2026-03-16T07:42:04.616022+00:00", "level": "DEBUG", "logger": "core.command_bus", "message": "CommandBus: removed subscriber (total=2)"}
+{"ts": "2026-03-16T07:42:04.616485+00:00", "level": "INFO", "logger": "services.alcohol_service", "message": "AlcoholService stopped"}
+{"ts": "2026-03-16T07:42:04.617059+00:00", "level": "DEBUG", "logger": "core.command_bus", "message": "CommandBus: new subscriber filter=frozenset({'RESET', 'START_ALCOHOL', 'STOP_ALCOHOL'}) (total=3)"}
+{"ts": "2026-03-16T07:42:04.617444+00:00", "level": "INFO", "logger": "services.alcohol_service", "message": "AlcoholService started"}
+{"ts": "2026-03-16T07:42:04.617871+00:00", "level": "INFO", "logger": "core.device_manager", "message": "DeviceManager: restarted 'alcohol' (status=disconnected)"}
+{"ts": "2026-03-16T07:42:04.618255+00:00", "level": "ERROR", "logger": "core.watchdog", "message": "Watchdog: 'alcohol' restart failed"}
+{"ts": "2026-03-16T07:42:07.640733+00:00", "level": "INFO", "logger": "__main__", "message": "=== Pao-L Backend shutting down ==="}
+{"ts": "2026-03-16T07:42:07.642214+00:00", "level": "INFO", "logger": "core.watchdog", "message": "Watchdog stopped"}
+{"ts": "2026-03-16T07:42:07.643625+00:00", "level": "DEBUG", "logger": "core.event_bus", "message": "EventBus: removed subscriber (total=1)"}
+{"ts": "2026-03-16T07:42:07.644341+00:00", "level": "INFO", "logger": "adapters.ui_event_adapter", "message": "UIEventAdapter stopped"}
+{"ts": "2026-03-16T07:42:07.645390+00:00", "level": "DEBUG", "logger": "core.event_bus", "message": "EventBus: removed subscriber (total=0)"}
+{"ts": "2026-03-16T07:42:07.646384+00:00", "level": "INFO", "logger": "controller.kiosk_controller", "message": "KioskController stopped"}
+{"ts": "2026-03-16T07:42:07.647465+00:00", "level": "INFO", "logger": "services.alcohol_service", "message": "AlcoholService: measurement stopped"}
+{"ts": "2026-03-16T07:42:07.648532+00:00", "level": "DEBUG", "logger": "core.command_bus", "message": "CommandBus: removed subscriber (total=2)"}
+{"ts": "2026-03-16T07:42:07.649108+00:00", "level": "INFO", "logger": "services.alcohol_service", "message": "AlcoholService stopped"}
+{"ts": "2026-03-16T07:42:07.650037+00:00", "level": "INFO", "logger": "core.device_manager", "message": "DeviceManager: stopped 'alcohol'"}
+{"ts": "2026-03-16T07:42:07.650863+00:00", "level": "INFO", "logger": "services.fingerprint_service", "message": "FingerprintService stopped"}
+{"ts": "2026-03-16T07:42:07.651821+00:00", "level": "INFO", "logger": "core.device_manager", "message": "DeviceManager: stopped 'fingerprint'"}
+{"ts": "2026-03-16T07:42:07.655372+00:00", "level": "DEBUG", "logger": "core.command_bus", "message": "CommandBus: removed subscriber (total=1)"}
+{"ts": "2026-03-16T07:42:07.656944+00:00", "level": "INFO", "logger": "services.printer_service", "message": "PrinterService stopped"}
+{"ts": "2026-03-16T07:42:07.657789+00:00", "level": "INFO", "logger": "core.device_manager", "message": "DeviceManager: stopped 'printer'"}
+{"ts": "2026-03-16T07:42:07.658617+00:00", "level": "DEBUG", "logger": "core.command_bus", "message": "CommandBus: removed subscriber (total=0)"}
+{"ts": "2026-03-16T07:42:07.659376+00:00", "level": "INFO", "logger": "services.camera_service", "message": "CameraService stopped"}
+{"ts": "2026-03-16T07:42:07.659966+00:00", "level": "INFO", "logger": "core.device_manager", "message": "DeviceManager: stopped 'camera'"}
+{"ts": "2026-03-16T07:42:07.660561+00:00", "level": "INFO", "logger": "__main__", "message": "=== Pao-L Backend stopped ==="}

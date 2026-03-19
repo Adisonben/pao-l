@@ -13,10 +13,12 @@ export default function StartButton({
   sublabel = "ทดสอบ",
   onClick,
   size = 220,
+  disabled = false,
 }) {
   const [pressing, setPressing] = useState(false);
 
   const handlePointerDown = () => {
+    if (disabled) return;
     setPressing(true);
     onClick?.();
   };
@@ -75,7 +77,8 @@ export default function StartButton({
             height: size,
             borderRadius: "50%",
             border: "none",
-            cursor: "pointer",
+            cursor: disabled ? "not-allowed" : "pointer",
+            opacity: disabled ? 0.4 : 1,
             overflow: "hidden",
             outline: "none",
             zIndex: 2,

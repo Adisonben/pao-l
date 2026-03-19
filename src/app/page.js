@@ -1,11 +1,15 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import AdPanel from "./components/AdPanel";
 import KioskPanel from "./components/KioskPanel";
+import { useKioskContext } from "@/context/KioskContext";
 
 export default function Home() {
-  const router = useRouter();
+  const { sendCommand, wsConnected } = useKioskContext();
+
+  const handleStartTest = () => {
+    sendCommand("START_TEST");
+  };
 
   return (
     <main className="flex h-screen w-screen overflow-hidden">
@@ -13,7 +17,7 @@ export default function Home() {
         <AdPanel />
       </div>
       <div className="w-[30%]">
-        <KioskPanel onStartTest={() => router.push("/blow")} />
+        <KioskPanel onStartTest={handleStartTest} wsConnected={wsConnected} />
       </div>
     </main>
   );

@@ -1,18 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
 import AdPanel from "../components/AdPanel";
 import AnalyzePanel from "../components/AnalyzePanel";
 
 export default function AnalyzePage() {
-  const router = useRouter();
-
-  useEffect(() => {
-    const t = setTimeout(() => router.push("/result"), 10000);
-    return () => clearTimeout(t);
-  }, [router]);
 
   return (
     <main className="relative h-screen w-screen overflow-hidden">

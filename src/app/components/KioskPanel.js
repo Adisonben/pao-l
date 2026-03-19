@@ -24,12 +24,13 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };
 
-export default function KioskPanel({ onStartTest }) {
+export default function KioskPanel({ onStartTest, wsConnected = false }) {
   const { playSound } = useGlobalSound();
   
   useEffect(() => {
     playSound("/sounds/voice_welcome.mp3");
   }, [playSound]);
+
   return (
     <div className="flex h-screen flex-col items-center justify-center bg-[#0f0f0f] px-8">
       <motion.div
@@ -75,7 +76,19 @@ export default function KioskPanel({ onStartTest }) {
 
         {/* CTA Button */}
         <motion.div variants={itemVariants} className="mt-2 w-full flex justify-center">
-          <StartButton onClick={onStartTest} />
+          <StartButton onClick={onStartTest} disabled={!wsConnected} />
+        </motion.div>
+
+        {/* Connection status */}
+        <motion.div variants={itemVariants} className="mt-4 flex items-center gap-2">
+          <span
+            className={`h-2 w-2 rounded-full ${
+              wsConnected ? "bg-green-400" : "bg-zinc-600"
+            }`}
+          />
+          <span className="text-xs text-zinc-600">
+            {wsConnected ? "เชื่อมต่อแล้ว" : "กำลังเชื่อมต่อ..."}
+          </span>
         </motion.div>
       </motion.div>
 
