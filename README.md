@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## PAO-L Kiosk UI
 
-## Getting Started
+Interactive kiosk interface for the PAO-L alcohol breath test station, built with Next.js App Router. The frontend can run against the real kiosk backend or an in-browser mock depending on `APP_MODE`.
 
-First, run the development server:
+## Quick start
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Install dependencies
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+   ```bash
+   npm install
+   ```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+2. Copy `.env.example` (or create `.env`) and set the desired mode:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   ```bash
+   APP_MODE=dev
+   NEXT_PUBLIC_WS_URL=ws://localhost:8000/ws # used only in prod mode
+   ```
 
-## Learn More
+3. Run the development server
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   npm run dev
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. Visit [http://localhost:3000](http://localhost:3000)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## APP_MODE reference
 
-## Deploy on Vercel
+`APP_MODE` is resolved at build time and exposed to the client as `NEXT_PUBLIC_APP_MODE`. It controls how the kiosk experience behaves:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Mode       | Backend connection | Behaviour | UI helpers |
+|------------|--------------------|-----------|------------|
+| `dev`      | Mocked             | Auto-progresses through the full flow with scripted demo data. Useful for fast UI development. | Overlay shortcut buttons to replay the demo or reset mock state. |
+| `interface`| Mocked             | Stays on the current screen until you manually navigate. No auto-commands are sent. | Overlay provides Previous/Next step navigation and buttons to render pass/fail results. |
+| `prod`     | Real WebSocket     | Live kiosk behaviour. Auto navigation, error recovery, and command dispatch use the backend. | Overlay hidden. |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Switching modes quickly
+
+- Edit `APP_MODE` in `.env`, then restart `npm run dev` so the value is baked into the bundle.
+- During `dev`/`interface` modes, a banner appears in the top-left corner showing the active mode and exposing mock controls.
+
+## Project structure highlights
+
+- `src/context/KioskContext.js` — exposes kiosk state and hides whether we are talking to the backend or mocks.
+- `src/hooks/useKiosk.js` — real WebSocket implementation for production mode.
+- `src/hooks/useMockKiosk.js` — deterministic mock environment used in non-prod modes.
+- `src/app/ModeOverlay.js` — developer overlay for mode awareness and manual navigation.
+
+## Production readiness checklist
+
+- Set `APP_MODE=prod` and configure `NEXT_PUBLIC_WS_URL` to target the live backend.
+- Verify the kiosk can connect over WebSocket before deployment.
+- Disable the overlay by building with `APP_MODE=prod`.

@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
+  env: {
+    NEXT_PUBLIC_APP_MODE: process.env.APP_MODE ?? "prod",
+  },
 };
 
 export default nextConfig;

@@ -13,7 +13,7 @@ import { useGlobalSound } from "@/hooks/useGlobalSound";
  *   flow_error             → "flow_error"
  *   timeout, error         → "error"
  */
-const PHASES = {
+export const PHASES = {
   preparing:  { label: "กำลังเตรียมพร้อม...", color: "text-zinc-400", iconColor: "#71717a" },
   ready:      { label: "พร้อมแล้ว — เป่าลมได้เลย", color: "text-yellow-400", iconColor: "#facc15" },
   blowing:    { label: "ตรวจพบลมหายใจ...", color: "text-blue-400", iconColor: "#60a5fa" },
@@ -21,7 +21,7 @@ const PHASES = {
   error:      { label: "เชื่อมต่อ hardware ล้มเหลว", color: "text-red-500", iconColor: "#ef4444" },
 };
 
-function sensorStateToPhase(sensorState) {
+export function sensorStateToPhase(sensorState) {
   switch (sensorState) {
     case "ready":           return "ready";
     case "sampling":

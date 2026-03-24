@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useKioskContext } from "@/context/KioskContext";
 import { motion } from "framer-motion";
 import AnalyzePanel from "../components/AnalyzePanel";
 
@@ -10,8 +11,17 @@ const ANALYZE_DURATION = 6000; // 6 seconds
 export default function AnalyzePage() {
   const router = useRouter();
   const timerRef = useRef(null);
+  const { mode } = useKioskContext();
 
   useEffect(() => {
+    if (mode === "interface") {
+      return () => {
+        if (timerRef.current) {
+          clearTimeout(timerRef.current);
+        }
+      };
+    }
+
     timerRef.current = setTimeout(() => {
       router.push("/result");
     }, ANALYZE_DURATION);
@@ -19,7 +29,7 @@ export default function AnalyzePage() {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [router]);
+  }, [router, mode]);
 
   return (
     <main className="relative h-screen w-screen overflow-hidden">

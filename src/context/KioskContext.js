@@ -2,6 +2,8 @@
 
 import { createContext, useContext } from "react";
 import { useKiosk } from "@/hooks/useKiosk";
+import { useAppMode } from "@/hooks/useAppMode";
+import { useMockKiosk } from "@/hooks/useMockKiosk";
 
 const KioskContext = createContext(null);
 
@@ -10,13 +12,17 @@ const KioskContext = createContext(null);
  * Navigation is handled by individual pages, not centrally.
  */
 export function KioskProvider({ children }) {
-  const kiosk = useKiosk();
+  const mode = useAppMode();
+  const baseKiosk = mode === "prod" ? useKiosk() : useMockKiosk(mode);
 
-  return (
-    <KioskContext.Provider value={kiosk}>
-      {children}
-    </KioskContext.Provider>
-  );
+  const { mockControls = null, ...rest } = baseKiosk;
+  const value = {
+    ...rest,
+    mockControls,
+    mode,
+  };
+
+  return <KioskContext.Provider value={value}>{children}</KioskContext.Provider>;
 }
 
 export function useKioskContext() {

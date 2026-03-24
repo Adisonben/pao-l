@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { GlobalSoundProvider } from "@/hooks/useGlobalSound";
 import { KioskProvider } from "@/context/KioskContext";
+import ModeOverlay from "./ModeOverlay";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,6 +28,7 @@ export default function RootLayout({ children }) {
         <GlobalSoundProvider>
           <KioskProvider>
             {children}
+            <ModeOverlay />
           </KioskProvider>
         </GlobalSoundProvider>
       </body>

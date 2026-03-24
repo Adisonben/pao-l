@@ -7,9 +7,15 @@ import { useGlobalSound } from "@/hooks/useGlobalSound";
 
 const COUNTDOWN_SEC = 6;
 
-export default function ResultPanel({ result = "pass", value = null, onDone }) {
+export default function ResultPanel({
+  result = "pass",
+  value = null,
+  onDone,
+  manualMessage,
+}) {
   const router = useRouter();
   const [countdown, setCountdown] = useState(COUNTDOWN_SEC);
+  const isManual = Boolean(manualMessage);
   const isPass = result === "pass";
   
   const { playSound } = useGlobalSound();
@@ -19,14 +25,18 @@ export default function ResultPanel({ result = "pass", value = null, onDone }) {
   }, [isPass, playSound]);
 
   useEffect(() => {
+    if (isManual) {
+      return undefined;
+    }
+
     if (countdown <= 0) {
       if (onDone) onDone();
       else router.push("/");
-      return;
+      return undefined;
     }
     const t = setTimeout(() => setCountdown((c) => c - 1), 1000);
     return () => clearTimeout(t);
-  }, [countdown, router, onDone]);
+  }, [countdown, router, onDone, isManual]);
 
   return (
     <div className="flex h-screen flex-col bg-[#0f0f0f]">
@@ -101,9 +111,15 @@ export default function ResultPanel({ result = "pass", value = null, onDone }) {
           transition={{ delay: 1.2, duration: 0.6 }}
           className="text-xs text-zinc-600"
         >
-          กลับหน้าหลักใน{" "}
-          <span className="font-bold text-zinc-400">{countdown}</span>{" "}
-          วินาที
+          {isManual ? (
+            <span className="text-zinc-400">{manualMessage}</span>
+          ) : (
+            <>
+              กลับหน้าหลักใน{" "}
+              <span className="font-bold text-zinc-400">{countdown}</span>{" "}
+              วินาที
+            </>
+          )}
         </motion.p>
       </div>
 

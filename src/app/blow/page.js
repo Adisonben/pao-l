@@ -10,7 +10,7 @@ const MAX_ERROR_RETRY = 5;
 
 export default function BlowPage() {
   const router = useRouter();
-  const { sensorState, testResult, sendCommand } = useKioskContext();
+  const { sensorState, testResult, sendCommand, mode } = useKioskContext();
   const navigatedRef = useRef(false);
   const retryIntervalRef = useRef(null);
   const errorActiveRef = useRef(false);
@@ -29,7 +29,9 @@ export default function BlowPage() {
     resetTriggeredRef.current = true;
     stopErrorTimers();
     sendCommand("RESET");
-    router.replace("/");
+    if (mode !== "interface") {
+      router.replace("/");
+    }
   };
 
   const startErrorRecovery = () => {
@@ -51,13 +53,24 @@ export default function BlowPage() {
   };
 
   useEffect(() => {
-    if (testResult && testResult.success && !navigatedRef.current) {
+    if (
+      mode !== "interface" &&
+      testResult &&
+      testResult.success &&
+      !navigatedRef.current
+    ) {
       navigatedRef.current = true;
       router.push("/analyze");
     }
-  }, [testResult, router]);
+  }, [testResult, router, mode]);
 
   useEffect(() => {
+    if (mode === "interface") {
+      stopErrorTimers();
+      resetTriggeredRef.current = false;
+      return;
+    }
+
     if (sensorState === "error" || sensorState === "timeout") {
       if (!errorActiveRef.current) {
         startErrorRecovery();
@@ -71,7 +84,7 @@ export default function BlowPage() {
       resetTriggeredRef.current = false;
       attemptCountRef.current = 0;
     }
-  }, [sensorState]);
+  }, [sensorState, mode]);
 
   useEffect(() => {
     return () => {

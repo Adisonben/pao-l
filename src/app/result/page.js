@@ -8,15 +8,17 @@ import { useKioskContext } from "@/context/KioskContext";
 
 export default function ResultPage() {
   const router = useRouter();
-  const { testResult, sendCommand } = useKioskContext();
+  const { testResult, sendCommand, mode } = useKioskContext();
 
   const result = testResult?.status === "OK" ? "pass" : "fail";
   const value = testResult?.value ?? null;
 
   const handleDone = useCallback(() => {
     sendCommand("RESET");
-    router.push("/");
-  }, [sendCommand, router]);
+    if (mode !== "interface") {
+      router.push("/");
+    }
+  }, [sendCommand, router, mode]);
 
   return (
     <main className="flex h-screen w-screen overflow-hidden">
@@ -24,7 +26,16 @@ export default function ResultPage() {
         <AdPanel />
       </div>
       <div className="w-[30%]">
-        <ResultPanel result={result} value={value} onDone={handleDone} />
+        <ResultPanel
+          result={result}
+          value={value}
+          onDone={mode === "interface" ? undefined : handleDone}
+          manualMessage={
+            mode === "interface"
+              ? "Interface mode — use the controls to navigate when ready"
+              : undefined
+          }
+        />
       </div>
     </main>
   );
