@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useKioskContext } from "@/context/KioskContext";
 import { PHASES, sensorStateToPhase } from "@/app/components/BlowPanel";
@@ -35,6 +35,7 @@ export default function ModeOverlay() {
   const { mode, mockControls, sensorState } = useKioskContext();
   const router = useRouter();
   const pathname = usePathname();
+  const [open, setOpen] = useState(true);
 
   const currentIndex = useMemo(
     () => STEPS.findIndex((step) => step.path === pathname),
@@ -60,6 +61,18 @@ export default function ModeOverlay() {
 
   return (
     <div className="pointer-events-none fixed left-4 top-4 z-50 flex flex-col gap-3">
+      <div className="pointer-events-auto">
+        <button
+          type="button"
+          onClick={() => setOpen((prev) => !prev)}
+          className="rounded-full bg-zinc-900/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em] text-white shadow-lg shadow-black/40 transition hover:bg-zinc-800"
+        >
+          {open ? "Hide Overlay" : "Show Overlay"}
+        </button>
+      </div>
+
+      {!open ? null : (
+        <>
       <div className={badgeBase}>
         <div className="flex items-center justify-between gap-4">
           <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-500">
@@ -207,6 +220,8 @@ export default function ModeOverlay() {
           ) : null}
         </div>
       ) : null}
+        </>
+      )}
     </div>
   );
 }

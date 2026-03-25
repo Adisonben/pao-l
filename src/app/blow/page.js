@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import AdPanel from "../components/AdPanel";
+import InstructionPanel from "../components/InstructionPanel";
 import BlowPanel from "../components/BlowPanel";
 import { useKioskContext } from "@/context/KioskContext";
 
@@ -94,12 +95,16 @@ export default function BlowPage() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <main className="flex h-screen w-screen overflow-hidden">
-      <div className="w-[70%]">
-        <AdPanel />
+    <main className="flex h-screen overflow-hidden">
+      <div className="flex w-[70%] flex-col p-6 pb-6">
+        <div className="flex-1 overflow-hidden rounded-3xl bg-black/90">
+          <InstructionPanel />
+        </div>
       </div>
-      <div className="w-[30%]">
-        <BlowPanel sensorState={sensorState} errorAttempt={errorAttempt} maxRetry={MAX_ERROR_RETRY} />
+      <div className="flex w-[30%] flex-col p-6 pb-6">
+        <div className="flex-1 overflow-hidden rounded-3xl">
+          <BlowPanel sensorState={sensorState} errorAttempt={errorAttempt} maxRetry={MAX_ERROR_RETRY} />
+        </div>
       </div>
     </main>
   );

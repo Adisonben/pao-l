@@ -4,6 +4,11 @@ import { useEffect } from "react";
 import { motion } from "framer-motion";
 import StartButton from "./StartButton";
 import { useGlobalSound } from "@/hooks/useGlobalSound";
+import { FaRegClock, FaRegCopyright } from "react-icons/fa";
+import ReactCountryFlag from "react-country-flag";
+import { AiOutlineSafety } from "react-icons/ai";
+import { SiCodefresh } from "react-icons/si";
+import { TbWind } from "react-icons/tb";
 
 /**
  * KioskPanel — Right 30% interactive kiosk interface.
@@ -32,7 +37,23 @@ export default function KioskPanel({ onStartTest, wsConnected = false }) {
   }, [playSound]);
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center bg-[#0f0f0f] px-8">
+    <div className="relative flex h-screen flex-col items-center justify-center bg-[#0f0f0f] px-8">
+      <div className="absolute right-6 top-6 flex gap-2">
+        <button
+          type="button"
+          className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-white transition hover:bg-white/20"
+        >
+          <ReactCountryFlag countryCode="TH" svg style={{ width: '2em', height: '2em' }} />
+          TH
+        </button>
+        <button
+          type="button"
+          className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-white transition hover:bg-white/20"
+        >
+          <ReactCountryFlag countryCode="US" svg style={{ width: '2em', height: '2em' }} />
+          EN
+        </button>
+      </div>
       <motion.div
         className="flex w-full flex-col items-center text-center"
         variants={containerVariants}
@@ -41,11 +62,11 @@ export default function KioskPanel({ onStartTest, wsConnected = false }) {
       >
         {/* Logo / Title */}
         <motion.div variants={itemVariants} className="mb-6 flex flex-col items-center gap-1">
-          <span className="text-5xl font-black tracking-tight text-white">
+          <span className="text-7xl font-black tracking-tight text-white">
             Pao
             <span className="text-yellow-400">-L</span>
           </span>
-          <span className="text-xs font-medium uppercase tracking-[0.25em] text-zinc-500">
+          <span className="text-base font-medium uppercase tracking-[0.25em] text-zinc-500">
             Alcohol Breath Test Station
           </span>
         </motion.div>
@@ -59,48 +80,97 @@ export default function KioskPanel({ onStartTest, wsConnected = false }) {
         {/* Main instruction */}
         <motion.h1
           variants={itemVariants}
-          className="text-xl font-semibold leading-relaxed text-white"
+          className="text-4xl font-semibold leading-relaxed text-white"
         >
-          ตรวจวัดระดับแอลกอฮอล์
+          <span className="text-2xl">ตรวจวัดระดับ </span>
+          <span className="text-yellow-400">แอลกอฮอล์</span>
           <br />
-          ก่อนขับรถ
+          <span>ก่อนขับรถ</span>
         </motion.h1>
-
-        {/* Sub instruction */}
-        <motion.p
-          variants={itemVariants}
-          className="mt-3 text-sm text-zinc-400"
-        >
-          ใช้เวลาเพียง 10 วินาที
-        </motion.p>
 
         {/* CTA Button */}
         <motion.div variants={itemVariants} className="mt-2 w-full flex justify-center">
           <StartButton onClick={onStartTest} disabled={!wsConnected} />
         </motion.div>
 
+        {/* Sub instruction */}
+        <motion.p
+          variants={itemVariants}
+          className="mt-3 text-zinc-400 mb-4"
+        >
+          <div className="flex items-center gap-2">
+            <div className="text-6xl">
+              <FaRegClock />
+            </div>
+            <div>
+              <span className="text-xl">ใช้เวลาเพียง </span>
+              <br />
+              <span className="text-4xl text-yellow-400 font-bold">10</span><span className="text-2xl"> วินาที</span>
+            </div>
+          </div>
+        </motion.p>
+
+        <motion.div variants={itemVariants} className="mt-2 w-full flex justify-center gap-6">
+            <div className="flex items-center gap-1">
+              <div className="text-xl text-yellow-400">
+                <AiOutlineSafety />
+              </div>
+              <div>
+                <span className="text-xl">ปลอดภัย</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="text-xl text-green-400">
+                <SiCodefresh />
+              </div>
+              <div>
+                <span className="text-xl">สะอาด</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="text-xl text-blue-400">
+                <TbWind />
+              </div>
+              <div>
+                <span className="text-xl">รวดเร็ว</span>
+              </div>
+            </div>
+        </motion.div>
+      </motion.div>
+
+
+      {/* Footer */}
+      <motion.div variants={itemVariants} className="absolute bottom-10 mb-4 flex gap-4">
+        {/* copy right */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 0.6 }}
+          className="text-xs text-zinc-700"
+        >
+          <span className="flex items-center gap-1">
+            <FaRegCopyright />
+            <span>Pao-L</span>
+          </span>
+        </motion.p>
+
         {/* Connection status */}
-        <motion.div variants={itemVariants} className="mt-4 flex items-center gap-2">
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 0.6 }}
+          className="text-xs text-zinc-700 flex items-center gap-2"
+        >
           <span
             className={`h-2 w-2 rounded-full ${
               wsConnected ? "bg-green-400" : "bg-zinc-600"
             }`}
-          />
+          ></span>
           <span className="text-xs text-zinc-600">
             {wsConnected ? "เชื่อมต่อแล้ว" : "กำลังเชื่อมต่อ..."}
           </span>
-        </motion.div>
+        </motion.p>
       </motion.div>
-
-      {/* Footer */}
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2, duration: 0.6 }}
-        className="absolute bottom-6 text-xs text-zinc-700"
-      >
-        PAO AL · กดปุ่มเพื่อเริ่มการทดสอบ
-      </motion.p>
     </div>
   );
 }

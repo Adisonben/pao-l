@@ -16,8 +16,8 @@ const ADS = [
   { type: "image", src: "/ads/ads2.jpg", duration: 10000 },
   { type: "image", src: "/ads/ads3.jpg", duration: 10000 },
   { type: "image", src: "/ads/ads4.jpg", duration: 10000 },
-  { type: "video", src: "/ads/ads5.mp4" },
-  { type: "video", src: "/ads/ads6.mp4" },
+  // { type: "video", src: "/ads/ads5.mp4" },
+  // { type: "video", src: "/ads/ads6.mp4" },
 ];
 
 export default function AdPanel() {
@@ -51,7 +51,7 @@ export default function AdPanel() {
   }, [index, mute, unmute]);
 
   return (
-    <div className="relative h-screen w-full overflow-hidden bg-black">
+    <div className="relative h-full w-full overflow-hidden bg-black">
 
       <AnimatePresence mode="wait">
 

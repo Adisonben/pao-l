@@ -42,7 +42,7 @@ export default function StartButton({
       `}</style>
 
       <div
-        className="mt-10 flex w-full justify-center"
+        className="flex w-full justify-center"
         style={{
           position: "relative",
           width: size + 60,
