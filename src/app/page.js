@@ -1,13 +1,20 @@
 "use client";
 
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import AdPanel from "./components/AdPanel";
 import KioskPanel from "./components/KioskPanel";
 import { useKioskContext } from "@/context/KioskContext";
+import { useGlobalSound } from "@/hooks/useGlobalSound";
 
 export default function Home() {
   const router = useRouter();
   const { sendCommand, wsConnected } = useKioskContext();
+  const { playSound } = useGlobalSound();
+
+  useEffect(() => {
+    playSound("welcome");
+  }, []);
 
   const handleStartTest = () => {
     sendCommand("START_TEST");

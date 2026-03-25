@@ -3,6 +3,7 @@ import "./globals.css";
 import { GlobalSoundProvider } from "@/hooks/useGlobalSound";
 import { KioskProvider } from "@/context/KioskContext";
 import ModeOverlay from "./ModeOverlay";
+import ScreenSaver from "./components/ScreenSaver";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,6 +29,7 @@ export default function RootLayout({ children }) {
         <GlobalSoundProvider>
           <KioskProvider>
             {children}
+            <ScreenSaver />
             <ModeOverlay />
           </KioskProvider>
         </GlobalSoundProvider>

@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useGlobalSound } from "@/hooks/useGlobalSound";
 
 const COUNTDOWN_SEC = 6;
 
@@ -18,12 +17,6 @@ export default function ResultPanel({
   const isManual = Boolean(manualMessage);
   const isPass = result === "pass";
   
-  const { playSound } = useGlobalSound();
-  
-  useEffect(() => {
-    playSound(isPass ? "/sounds/voice_result_pass.mp3" : "/sounds/voice_result_fail.mp3");
-  }, [isPass, playSound]);
-
   useEffect(() => {
     if (isManual) {
       return undefined;

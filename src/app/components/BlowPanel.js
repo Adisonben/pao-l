@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useGlobalSound } from "@/hooks/useGlobalSound";
 
 /**
  * sensorState values from backend alcohol_state events:
@@ -38,11 +36,6 @@ export function sensorStateToPhase(sensorState) {
 export default function BlowPanel({ sensorState, errorAttempt = null, maxRetry = 0 }) {
   const router = useRouter();
   const phase = sensorStateToPhase(sensorState);
-  const { playSound } = useGlobalSound();
-
-  useEffect(() => {
-    playSound("/sounds/voice_breathing.mp3");
-  }, [playSound]);
 
   const current = PHASES[phase] ?? PHASES.preparing;
 

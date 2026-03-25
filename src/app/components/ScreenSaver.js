@@ -4,15 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
+import { useGlobalSound } from "@/hooks/useGlobalSound";
 
 const ADS = [
-  { type: "image", src: "/ads/ads1.jpg", duration: 10000 },
-  { type: "image", src: "/ads/ads2.jpg", duration: 10000 },
-  { type: "image", src: "/ads/ads3.jpg", duration: 10000 },
-  { type: "image", src: "/ads/ads4.jpg", duration: 10000 },
+  { type: "video", src: "/ads/ads5.mp4" },
+  { type: "video", src: "/ads/ads6.mp4" },
 ];
 
-const IDLE_TIMEOUT = 60_000;
+const IDLE_TIMEOUT = 30_000;
 
 export default function ScreenSaver() {
   const router = useRouter();
@@ -21,6 +20,7 @@ export default function ScreenSaver() {
   const [adIndex, setAdIndex] = useState(0);
   const idleTimerRef = useRef(null);
   const adTimerRef = useRef(null);
+  const { playSound } = useGlobalSound();
 
   const resetIdle = () => {
     if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
@@ -61,6 +61,7 @@ export default function ScreenSaver() {
 
   const handleDismiss = () => {
     setVisible(false);
+    playSound("welcome");
     router.push("/");
   };
 
@@ -73,7 +74,7 @@ export default function ScreenSaver() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.1 }}
           onClick={handleDismiss}
         >
           <AnimatePresence mode="wait">
@@ -89,7 +90,6 @@ export default function ScreenSaver() {
                 <video
                   src={currentAd.src}
                   autoPlay
-                  muted
                   playsInline
                   className="h-full w-full object-cover"
                   onEnded={() => setAdIndex((i) => (i + 1) % ADS.length)}
@@ -117,8 +117,12 @@ export default function ScreenSaver() {
             ))}
           </div>
 
-          <div className="absolute bottom-16 left-1/2 -translate-x-1/2 text-white/50 text-sm">
-            แตะหน้าจอเพื่อเริ่มใช้งาน
+          <div className="absolute bottom-16 left-1/2 -translate-x-1/2 text-yellow-400 text-xl">
+            <p className="text-7xl font-black tracking-tight text-white/80 bg-gray-600/60 p-2 mb-2 rounded-lg">
+              Pao
+              <span className="text-yellow-400">-L</span>
+            </p>
+            <p>แตะหน้าจอเพื่อเริ่มใช้งาน</p>
           </div>
         </motion.div>
       )}

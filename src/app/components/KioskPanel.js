@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
 import { motion } from "framer-motion";
 import StartButton from "./StartButton";
-import { useGlobalSound } from "@/hooks/useGlobalSound";
 import { FaRegClock, FaRegCopyright } from "react-icons/fa";
 import ReactCountryFlag from "react-country-flag";
 import { AiOutlineSafety } from "react-icons/ai";
@@ -30,12 +28,6 @@ const itemVariants = {
 };
 
 export default function KioskPanel({ onStartTest, wsConnected = false }) {
-  const { playSound } = useGlobalSound();
-  
-  useEffect(() => {
-    playSound("/sounds/voice_welcome.mp3");
-  }, [playSound]);
-
   return (
     <div className="relative flex h-screen flex-col items-center justify-center bg-[#0f0f0f] px-8">
       <div className="absolute right-6 top-6 flex gap-2">
@@ -94,7 +86,7 @@ export default function KioskPanel({ onStartTest, wsConnected = false }) {
         </motion.div>
 
         {/* Sub instruction */}
-        <motion.p
+        <motion.div
           variants={itemVariants}
           className="mt-3 text-zinc-400 mb-4"
         >
@@ -108,7 +100,7 @@ export default function KioskPanel({ onStartTest, wsConnected = false }) {
               <span className="text-4xl text-yellow-400 font-bold">10</span><span className="text-2xl"> วินาที</span>
             </div>
           </div>
-        </motion.p>
+        </motion.div>
 
         <motion.div variants={itemVariants} className="mt-2 w-full flex justify-center gap-6">
             <div className="flex items-center gap-1">
