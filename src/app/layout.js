@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
         <GlobalSoundProvider>
           <KioskProvider>
             {children}
-            <ScreenSaver />
+            {/* <ScreenSaver /> */}
             <ModeOverlay />
           </KioskProvider>
         </GlobalSoundProvider>
