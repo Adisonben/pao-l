@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #000000;
   --foreground: #171717;
 }
 
@@ -30,10 +30,12 @@ body {
     transform: scale(1);
     opacity: 0.35;
   }
+
   70% {
     transform: scale(1.08);
     opacity: 0;
   }
+
   100% {
     transform: scale(1.08);
     opacity: 0;
@@ -51,15 +53,35 @@ body {
 }
 
 .frame {
-  width: 300px;      /* your frame size */
+  width: 300px;
   height: 320px;
   position: relative;
+
+  @media (max-width: 1600px) {
+    width: 240px;
+    height: 256px;
+  }
+
+  @media (max-height: 800px) {
+    width: 200px;
+    height: 213px;
+  }
 }
 
 .frame img {
   width: 100%;
   height: 100%;
-  object-fit: cover;         /* fill frame */
-  object-position: 0px 60px;   /* show top half */
-  transform: scale(1.8);       /* zoom */
+  object-fit: cover;
+  /* fill frame */
+  object-position: center;
+  /* center character */
+  transform: scale(1.6);
+  /* zoom */
+}
+
+/* Height-based utility for Kiosk displays */
+@utility h-sm {
+  @media (max-height: 800px) {
+    @apply gap-2 p-2;
+  }
 }

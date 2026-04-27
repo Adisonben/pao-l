@@ -23,12 +23,12 @@ export default function Home() {
 
   return (
     <main className="flex h-screen overflow-hidden">
-      <div className="flex w-[70%] flex-col p-6 pb-6">
+      <div className="flex w-[65%] xl:w-[70%] flex-col lg:p-6 p-4 pb-4">
         <div className="flex-1 overflow-hidden rounded-3xl bg-black/90">
           <AdPanel />
         </div>
       </div>
-      <div className="flex w-[30%] flex-col p-6 pb-6">
+      <div className="flex w-[35%] xl:w-[30%] flex-col lg:p-6 p-4 pb-4">
         <div className="flex-1 overflow-hidden rounded-3xl">
           <KioskPanel onStartTest={handleStartTest} wsConnected={wsConnected} />
         </div>

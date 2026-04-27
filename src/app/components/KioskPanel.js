@@ -29,7 +29,7 @@ const itemVariants = {
 
 export default function KioskPanel({ onStartTest, wsConnected = false }) {
   return (
-    <div className="relative flex h-screen flex-col items-center justify-center bg-[#0f0f0f] px-8">
+    <div className="relative flex h-screen flex-col items-center justify-center bg-[#0f0f0f] px-4 xl:px-8">
       <div className="absolute right-6 top-6 flex gap-2">
         <button
           type="button"
@@ -53,12 +53,12 @@ export default function KioskPanel({ onStartTest, wsConnected = false }) {
         animate="visible"
       >
         {/* Logo / Title */}
-        <motion.div variants={itemVariants} className="mb-6 flex flex-col items-center gap-1">
-          <span className="text-7xl font-black tracking-tight text-white">
+        <motion.div variants={itemVariants} className="mb-4 xl:mb-6 flex flex-col items-center gap-1">
+          <span className="text-5xl xl:text-7xl font-black tracking-tight text-white">
             Pao
             <span className="text-yellow-400">-L</span>
           </span>
-          <span className="text-base font-medium uppercase tracking-[0.25em] text-zinc-500">
+          <span className="text-xs xl:text-base font-medium uppercase tracking-[0.25em] text-zinc-500">
             Alcohol Breath Test Station
           </span>
         </motion.div>
@@ -66,15 +66,15 @@ export default function KioskPanel({ onStartTest, wsConnected = false }) {
         {/* Divider */}
         <motion.div
           variants={itemVariants}
-          className="mb-8 h-px w-16 bg-yellow-400/40"
+          className="mb-4 xl:mb-8 h-px w-16 bg-yellow-400/40"
         />
 
         {/* Main instruction */}
         <motion.h1
           variants={itemVariants}
-          className="text-4xl font-semibold leading-relaxed text-white"
+          className="text-2xl xl:text-4xl font-semibold leading-relaxed text-white"
         >
-          <span className="text-2xl">ตรวจวัดระดับ </span>
+          <span className="text-xl xl:text-2xl">ตรวจวัดระดับ </span>
           <span className="text-yellow-400">แอลกอฮอล์</span>
           <br />
           <span>ก่อนขับรถ</span>
@@ -90,41 +90,41 @@ export default function KioskPanel({ onStartTest, wsConnected = false }) {
           variants={itemVariants}
           className="mt-3 text-zinc-400 mb-4"
         >
-          <div className="flex items-center gap-2">
-            <div className="text-6xl">
+          <div className="flex items-center gap-1 xl:gap-2">
+            <div className="text-4xl xl:text-6xl">
               <FaRegClock />
             </div>
             <div>
-              <span className="text-xl">ใช้เวลาเพียง </span>
+              <span className="text-lg xl:text-xl">ใช้เวลาเพียง </span>
               <br />
-              <span className="text-4xl text-yellow-400 font-bold">10</span><span className="text-2xl"> วินาที</span>
+              <span className="text-2xl xl:text-4xl text-yellow-400 font-bold">10</span><span className="text-xl xl:text-2xl"> วินาที</span>
             </div>
           </div>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="mt-2 w-full flex justify-center gap-6">
+        <motion.div variants={itemVariants} className="mt-2 w-full flex justify-center gap-4 xl:gap-6">
             <div className="flex items-center gap-1">
-              <div className="text-xl text-yellow-400">
+              <div className="text-lg xl:text-xl text-yellow-400">
                 <AiOutlineSafety />
               </div>
               <div>
-                <span className="text-xl">ปลอดภัย</span>
+                <span className="text-lg xl:text-xl">ปลอดภัย</span>
               </div>
             </div>
             <div className="flex items-center gap-1">
-              <div className="text-xl text-green-400">
+              <div className="text-lg xl:text-xl text-green-400">
                 <SiCodefresh />
               </div>
               <div>
-                <span className="text-xl">สะอาด</span>
+                <span className="text-lg xl:text-xl">สะอาด</span>
               </div>
             </div>
             <div className="flex items-center gap-1">
-              <div className="text-xl text-blue-400">
+              <div className="text-lg xl:text-xl text-blue-400">
                 <TbWind />
               </div>
               <div>
-                <span className="text-xl">รวดเร็ว</span>
+                <span className="text-lg xl:text-xl">รวดเร็ว</span>
               </div>
             </div>
         </motion.div>

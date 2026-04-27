@@ -54,10 +54,10 @@ export default function BlowPanel({ sensorState, errorAttempt = null, maxRetry =
     <div className="flex h-screen flex-col bg-[#0f0f0f]">
 
       {/* ── HEADER ── */}
-      <div className="flex flex-col items-center gap-1 px-8 pt-10">
+      <div className="flex flex-col items-center gap-1 px-4 xl:px-8 pt-4 xl:pt-10">
         <button
           onClick={() => router.push("/")}
-          className="mb-4 flex items-center gap-1 self-start text-xs text-zinc-600 transition-colors hover:text-zinc-400"
+          className="mb-2 xl:mb-4 flex items-center gap-1 self-start text-xs text-zinc-600 transition-colors hover:text-zinc-400"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width={14} height={14} viewBox="0 0 24 24"
             fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -71,14 +71,14 @@ export default function BlowPanel({ sensorState, errorAttempt = null, maxRetry =
         <span className="text-xs font-medium uppercase tracking-[0.25em] text-zinc-500">
           Alcohol Breath Test
         </span>
-        <div className="mt-4 h-px w-16 bg-yellow-400/30" />
-        <h1 className="mt-4 text-2xl font-semibold leading-relaxed text-white">
+        <div className="mt-2 xl:mt-4 h-px w-16 bg-yellow-400/30" />
+        <h1 className="mt-2 xl:mt-4 text-xl xl:text-2xl font-semibold leading-relaxed text-white">
           ทดสอบระดับแอลกอฮอล์
         </h1>
       </div>
 
       {/* ── MAIN ── */}
-      <div className="flex flex-1 flex-col items-center justify-center gap-6 px-8 text-center">
+      <div className="flex flex-1 flex-col items-center justify-center gap-3 xl:gap-6 px-4 xl:px-8 text-center">
         <motion.div
           animate={
             phase === "ready"
@@ -100,7 +100,7 @@ export default function BlowPanel({ sensorState, errorAttempt = null, maxRetry =
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.35 }}
-              className={`text-3xl font-semibold tracking-wide ${current.color}`}
+              className={`text-2xl xl:text-3xl font-semibold tracking-wide ${current.color}`}
             >
               {current.label}
             </motion.p>
@@ -111,7 +111,7 @@ export default function BlowPanel({ sensorState, errorAttempt = null, maxRetry =
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="text-lg text-zinc-600"
+                className="text-base xl:text-lg text-zinc-600"
               >
                 {current.description}
             </motion.p>
@@ -136,7 +136,7 @@ export default function BlowPanel({ sensorState, errorAttempt = null, maxRetry =
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8, duration: 0.6 }}
-        className="pb-8 text-center text-xs text-zinc-700"
+        className="pb-4 xl:pb-8 text-center text-xs text-zinc-700"
       >
         PAO AL · กรุณาเป่าลมให้ต่อเนื่อง 10 วินาที
       </motion.p>
@@ -148,8 +148,9 @@ function BlowIcon({ color }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={250}
-      height={250}
+      width={200}
+      height={200}
+      className="xl:w-[250px] xl:h-[250px]"
       viewBox="0 0 64 64"
       fill="none"
       stroke={color}

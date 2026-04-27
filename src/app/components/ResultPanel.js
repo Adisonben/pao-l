@@ -78,10 +78,10 @@ export default function ResultPanel({
     <div className="flex h-screen flex-col bg-[#0f0f0f]">
 
       {/* ── HEADER ── */}
-      <div className="flex flex-col items-center gap-1 px-6 pt-8">
+      <div className="flex flex-col items-center gap-1 px-4 xl:px-6 pt-4 xl:pt-8">
         <button
           onClick={() => router.push("/")}
-          className="mb-3 flex items-center gap-1 self-start text-xs text-zinc-600 transition-colors hover:text-zinc-400"
+          className="mb-2 xl:mb-3 flex items-center gap-1 self-start text-xs text-zinc-600 transition-colors hover:text-zinc-400"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width={14} height={14} viewBox="0 0 24 24"
             fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -95,14 +95,14 @@ export default function ResultPanel({
         <span className="text-xs font-medium uppercase tracking-[0.25em] text-zinc-500">
           Alcohol Breath Test
         </span>
-        <div className="mt-3 h-px w-12 bg-yellow-400/30" />
+        <div className="mt-2 xl:mt-3 h-px w-12 bg-yellow-400/30" />
       </div>
 
       <p className="text-center pt-2">ผลการตรวจวัดระดับแอลกอฮอล์ในลมหายใจ</p>
 
       {/* ── MAIN ── */}
-      <div className="flex flex-1 flex-col items-center justify-center gap-5 px-10 py-4 text-center">
-        <div className="bg-[#833535] flex flex-1 flex-col items-center justify-center gap-5 px-10 text-center rounded-4xl"
+      <div className="flex flex-1 flex-col items-center justify-center gap-3 xl:gap-5 px-4 xl:px-10 py-2 xl:py-4 text-center">
+        <div className="bg-[#833535] flex flex-1 flex-col items-center justify-center gap-3 xl:gap-5 px-4 xl:px-10 text-center rounded-4xl"
           style={{ 
             background: `${tier.color}20`, 
             border: `2px solid ${tier.color}`,
@@ -143,7 +143,7 @@ export default function ResultPanel({
                 ระดับที่ {tier.level}
               </span>
             )} */}
-            <span className="text-5xl font-black" style={{ color: tier.color }}>
+            <span className="text-3xl xl:text-5xl font-black" style={{ color: tier.color }}>
               {tier.nickname}
             </span>
           </motion.div>
@@ -151,23 +151,23 @@ export default function ResultPanel({
           <div className="h-px w-full" style={{ background: tier.color }} />
 
           {/* Symptom */}
-          <motion.p
+           <motion.p
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.75 }}
-            className="font-semibold  text-start w-full"
+            className="font-semibold text-start w-full"
           >
-            <span className="text-zinc-400 text-lg">อาการที่พบ:</span> <br />
-            <span className="text-zinc-200 text-2xl">{tier.symptom}</span>
+            <span className="text-zinc-400 text-base xl:text-lg">อาการที่พบ:</span> <br />
+            <span className="text-zinc-200 text-xl xl:text-2xl">{tier.symptom}</span>
           </motion.p>
-          <motion.p
+           <motion.p
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.75 }}
-            className="font-semibold  text-start w-full"
+            className="font-semibold text-start w-full"
           >
-            <span className="text-zinc-400 text-md">คำแนะนำ:</span> <br />
-            <span className="text-zinc-200 text-md">{ADVICE[tier.level]}</span>
+            <span className="text-zinc-400 text-sm xl:text-md">คำแนะนำ:</span> <br />
+            <span className="text-zinc-200 text-sm xl:text-md">{ADVICE[tier.level]}</span>
           </motion.p>
           
           {/* BAC Value */}
@@ -216,7 +216,7 @@ export default function ResultPanel({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.0, duration: 0.6 }}
-        className="pb-6 text-center text-xs text-zinc-700"
+        className="pb-3 xl:pb-6 text-center text-xs text-zinc-700"
       >
         PAO AL · ขอบคุณที่ใช้บริการ
       </motion.p>

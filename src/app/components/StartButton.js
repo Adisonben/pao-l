@@ -12,7 +12,7 @@ export default function StartButton({
   label = "เริ่ม",
   sublabel = "ทดสอบ",
   onClick,
-  size = 220,
+  size = 200,
   disabled = false,
 }) {
   const [pressing, setPressing] = useState(false);
