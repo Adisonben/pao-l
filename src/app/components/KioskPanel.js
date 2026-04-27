@@ -29,7 +29,7 @@ const itemVariants = {
 
 export default function KioskPanel({ onStartTest, wsConnected = false }) {
   return (
-    <div className="relative flex h-screen flex-col items-center justify-center bg-[#0f0f0f] px-4 xl:px-8">
+    <div className="relative flex h-full flex-col items-center justify-center bg-[#0f0f0f] px-4 xl:px-8">
       <div className="absolute right-6 top-6 flex gap-2">
         <button
           type="button"
@@ -53,12 +53,12 @@ export default function KioskPanel({ onStartTest, wsConnected = false }) {
         animate="visible"
       >
         {/* Logo / Title */}
-        <motion.div variants={itemVariants} className="mb-4 xl:mb-6 flex flex-col items-center gap-1">
-          <span className="text-5xl xl:text-7xl font-black tracking-tight text-white">
+        <motion.div variants={itemVariants} className="mb-2 flex flex-col items-center gap-1">
+          <span className="text-4xl font-black tracking-tight text-white">
             Pao
             <span className="text-yellow-400">-L</span>
           </span>
-          <span className="text-xs xl:text-base font-medium uppercase tracking-[0.25em] text-zinc-500">
+          <span className="text-xs font-medium uppercase tracking-[0.25em] text-zinc-500">
             Alcohol Breath Test Station
           </span>
         </motion.div>
@@ -66,15 +66,15 @@ export default function KioskPanel({ onStartTest, wsConnected = false }) {
         {/* Divider */}
         <motion.div
           variants={itemVariants}
-          className="mb-4 xl:mb-8 h-px w-16 bg-yellow-400/40"
+          className="mb-4 h-px w-32 bg-yellow-400/40"
         />
 
         {/* Main instruction */}
         <motion.h1
           variants={itemVariants}
-          className="text-2xl xl:text-4xl font-semibold leading-relaxed text-white"
+          className="text-2xl font-semibold leading-relaxed text-white"
         >
-          <span className="text-xl xl:text-2xl">ตรวจวัดระดับ </span>
+          <span>ตรวจวัดระดับ </span>
           <span className="text-yellow-400">แอลกอฮอล์</span>
           <br />
           <span>ก่อนขับรถ</span>
@@ -88,51 +88,51 @@ export default function KioskPanel({ onStartTest, wsConnected = false }) {
         {/* Sub instruction */}
         <motion.div
           variants={itemVariants}
-          className="mt-3 text-zinc-400 mb-4"
+          className="mt-2 text-zinc-400 mb-2"
         >
-          <div className="flex items-center gap-1 xl:gap-2">
-            <div className="text-4xl xl:text-6xl">
+          <div className="flex items-center gap-2">
+            <div className="text-5xl">
               <FaRegClock />
             </div>
             <div>
-              <span className="text-lg xl:text-xl">ใช้เวลาเพียง </span>
+              <span className="text-xl">ใช้เวลาเพียง </span>
               <br />
-              <span className="text-2xl xl:text-4xl text-yellow-400 font-bold">10</span><span className="text-xl xl:text-2xl"> วินาที</span>
+              <span className="text-3xl text-yellow-400 font-bold">10</span><span className="text-xl xl:text-2xl"> วินาที</span>
             </div>
           </div>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="mt-2 w-full flex justify-center gap-4 xl:gap-6">
-            <div className="flex items-center gap-1">
-              <div className="text-lg xl:text-xl text-yellow-400">
-                <AiOutlineSafety />
-              </div>
-              <div>
-                <span className="text-lg xl:text-xl">ปลอดภัย</span>
-              </div>
+        <motion.div variants={itemVariants} className="w-full flex justify-center gap-4">
+          <div className="flex items-center gap-1">
+            <div className="text-lg xl:text-xl text-yellow-400">
+              <AiOutlineSafety />
             </div>
-            <div className="flex items-center gap-1">
-              <div className="text-lg xl:text-xl text-green-400">
-                <SiCodefresh />
-              </div>
-              <div>
-                <span className="text-lg xl:text-xl">สะอาด</span>
-              </div>
+            <div>
+              <span className="text-lg xl:text-xl">ปลอดภัย</span>
             </div>
-            <div className="flex items-center gap-1">
-              <div className="text-lg xl:text-xl text-blue-400">
-                <TbWind />
-              </div>
-              <div>
-                <span className="text-lg xl:text-xl">รวดเร็ว</span>
-              </div>
+          </div>
+          <div className="flex items-center gap-1">
+            <div className="text-lg xl:text-xl text-green-400">
+              <SiCodefresh />
             </div>
+            <div>
+              <span className="text-lg xl:text-xl">สะอาด</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-1">
+            <div className="text-lg xl:text-xl text-blue-400">
+              <TbWind />
+            </div>
+            <div>
+              <span className="text-lg xl:text-xl">รวดเร็ว</span>
+            </div>
+          </div>
         </motion.div>
       </motion.div>
 
 
       {/* Footer */}
-      <motion.div variants={itemVariants} className="absolute bottom-10 mb-4 flex gap-4">
+      <motion.div variants={itemVariants} className="absolute bottom-0 flex gap-4">
         {/* copy right */}
         <motion.p
           initial={{ opacity: 0 }}
@@ -154,9 +154,8 @@ export default function KioskPanel({ onStartTest, wsConnected = false }) {
           className="text-xs text-zinc-700 flex items-center gap-2"
         >
           <span
-            className={`h-2 w-2 rounded-full ${
-              wsConnected ? "bg-green-400" : "bg-zinc-600"
-            }`}
+            className={`h-2 w-2 rounded-full ${wsConnected ? "bg-green-400" : "bg-zinc-600"
+              }`}
           ></span>
           <span className="text-xs text-zinc-600">
             {wsConnected ? "เชื่อมต่อแล้ว" : "กำลังเชื่อมต่อ..."}
