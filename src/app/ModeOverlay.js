@@ -133,7 +133,7 @@ export default function ModeOverlay() {
           <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400">
             Quick actions
           </p>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 mb-3">
             <button
               type="button"
               className={buttonBase}
@@ -147,6 +147,42 @@ export default function ModeOverlay() {
               onClick={() => mockControls.reset?.()}
             >
               Reset State
+            </button>
+          </div>
+          <span className="mb-2 block text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-400">
+            Mock Tier Result
+          </span>
+          <div className="flex flex-wrap gap-1.5">
+            {[
+              { label: "1 • สุภาพชน",  mg: 15,  status: "OK" },
+              { label: "2 • นักปราชญ์", mg: 40,  status: "OK" },
+              { label: "3 • เศรษฐี",   mg: 75,  status: "OK" },
+              { label: "4 • ศิลปิน",   mg: 125, status: "NG" },
+              { label: "5 • จอมยุทธ์", mg: 175, status: "NG" },
+              { label: "6 • ร่างทรง",  mg: 225, status: "NG" },
+              { label: "7 • เทพ",      mg: 300, status: "NG" },
+            ].map(({ label, mg, status }) => (
+              <button
+                key={label}
+                type="button"
+                className={buttonBase}
+                onClick={() => {
+                  const val = mg / 1000;
+                  if (status === "OK") mockControls.triggerPass?.(val);
+                  else mockControls.triggerFail?.(val);
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          <div className="mt-2 flex gap-1.5">
+            <button
+              type="button"
+              className={buttonBase}
+              onClick={() => mockControls.clearResult?.()}
+            >
+              Clear
             </button>
           </div>
         </div>
@@ -184,36 +220,46 @@ export default function ModeOverlay() {
           {mockControls ? (
             <div className="mt-3 border-t border-white/10 pt-3">
               <span className="mb-2 block text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-400">
-                Mock Data
+                Mock Tier Result
               </span>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  className={buttonBase}
-                  onClick={() => mockControls.triggerPass?.()}
-                >
-                  Show Pass
-                </button>
-                <button
-                  type="button"
-                  className={buttonBase}
-                  onClick={() => mockControls.triggerFail?.()}
-                >
-                  Show Fail
-                </button>
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  { label: "1 • สุภาพชน",  mg: 15,  status: "OK" },
+                  { label: "2 • นักปราชญ์",  mg: 40,  status: "OK" },
+                  { label: "3 • เศรษฐี",    mg: 75,  status: "OK" },
+                  { label: "4 • ศิลปิน",    mg: 125, status: "NG" },
+                  { label: "5 • จอมยุทธ์",  mg: 175, status: "NG" },
+                  { label: "6 • ร่างทรง",  mg: 225, status: "NG" },
+                  { label: "7 • เทพ",      mg: 300, status: "NG" },
+                ].map(({ label, mg, status }) => (
+                  <button
+                    key={label}
+                    type="button"
+                    className={buttonBase}
+                    onClick={() => {
+                      const val = mg / 1000;
+                      if (status === "OK") mockControls.triggerPass?.(val);
+                      else mockControls.triggerFail?.(val);
+                    }}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+              <div className="mt-2 flex flex-wrap gap-1.5">
                 <button
                   type="button"
                   className={buttonBase}
                   onClick={() => mockControls.clearResult?.()}
                 >
-                  Clear Result
+                  Clear
                 </button>
                 <button
                   type="button"
                   className={buttonBase}
                   onClick={() => mockControls.reset?.()}
                 >
-                  Reset State
+                  Reset
                 </button>
               </div>
             </div>

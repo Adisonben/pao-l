@@ -3,6 +3,9 @@
 import { motion } from "framer-motion";
 import { TbSquarePlus, TbArrowBigRightLines, TbWind } from "react-icons/tb";
 import { LuClipboardList } from "react-icons/lu";
+import { AiOutlineStop } from "react-icons/ai";
+import { AiOutlineSafety } from "react-icons/ai";
+import { SiCodefresh } from "react-icons/si";
 
 const steps = [
   {
@@ -29,18 +32,18 @@ export default function InstructionPanel() {
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="text-6xl font-black tracking-tight text-yellow-400"
+        className="text-6xl font-black tracking-tight text-yellow-400 border-b border-yellow-400 pb-4"
       >
-        <LuClipboardList className="inline-block mr-4" /><span>วิธีใช้เครื่องตรวจวัดแอลกอฮอล์</span>
+        <LuClipboardList className="inline-block mr-4" /><span>วิธีใช้</span><span className="text-white">เครื่องตรวจวัดแอลกอฮอล์</span>
       </motion.h2>
 
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.5 }}
-        className="mt-10 flex-1"
+        className="mt-5 flex-1"
       >
-        <div className="relative flex h-full flex-col overflow-hidden rounded-4xl border border-yellow-400/15 bg-white/5 px-10 py-8">
+        <div className="relative flex flex-col overflow-hidden rounded-4xl px-10 mb-10">
           <div className="absolute inset-y-0 right-0 w-1/3" aria-hidden="true" />
           <ol className="relative z-10 flex flex-1 flex-col justify-between">
             {steps.map(({ title, description, icon: Icon }, index) => (
@@ -52,8 +55,8 @@ export default function InstructionPanel() {
                   {index + 1}
                 </span>
                 <div className="flex flex-1 flex-col gap-2 text-left">
-                  <h3 className="text-6xl font-semibold text-yellow-400">{title}</h3>
-                  <p className="text-4xl text-zinc-300">{description}</p>
+                  <h3 className="text-5xl font-semibold text-yellow-400">{title}</h3>
+                  <p className="text-3xl text-zinc-300">{description}</p>
                 </div>
                 <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-yellow-400/30 text-4xl text-yellow-100">
                   <Icon />
@@ -61,6 +64,43 @@ export default function InstructionPanel() {
               </li>
             ))}
           </ol>
+        </div>
+        <div className="flex gap-4 items-center justify-center">
+          <div className="flex gap-4 items-center justify-center border-t border-b border-yellow-400/50 p-4">
+            <div className="flex items-center justify-center">
+                <AiOutlineStop className="text-8xl text-red-500" />
+            </div>
+            <div>
+                <p className="text-4xl text-zinc-300"><span className="text-red-400">ห้าม</span>ใช้หลอดจากแก้วน้ำ</p>
+                <p className="text-4xl text-zinc-300"><span className="text-red-400">ห้าม</span>นำของเหลวเข้าช่องเป่า</p>
+            </div>
+          </div>
+        </div>
+        <div className="mt-5 w-full flex justify-center gap-6">
+            <div className="flex items-center gap-1">
+              <div className="text-4xl text-yellow-400">
+                <AiOutlineSafety />
+              </div>
+              <div>
+                <span className="text-4xl">ปลอดภัย</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="text-4xl text-green-400">
+                <SiCodefresh />
+              </div>
+              <div>
+                <span className="text-4xl">สะอาด</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="text-4xl text-blue-400">
+                <TbWind />
+              </div>
+              <div>
+                <span className="text-4xl">รวดเร็ว</span>
+              </div>
+            </div>
         </div>
       </motion.div>
     </div>

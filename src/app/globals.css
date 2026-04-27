@@ -49,3 +49,17 @@ body {
   touch-action: manipulation;
   user-select: none;
 }
+
+.frame {
+  width: 300px;      /* your frame size */
+  height: 320px;
+  position: relative;
+}
+
+.frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;         /* fill frame */
+  object-position: 0px 60px;   /* show top half */
+  transform: scale(1.8);       /* zoom */
+}

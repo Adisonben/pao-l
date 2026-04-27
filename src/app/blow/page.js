@@ -6,18 +6,12 @@ import AdPanel from "../components/AdPanel";
 import InstructionPanel from "../components/InstructionPanel";
 import BlowPanel from "../components/BlowPanel";
 import { useKioskContext } from "@/context/KioskContext";
-import { useGlobalSound } from "@/hooks/useGlobalSound";
 
 const MAX_ERROR_RETRY = 5;
 
 export default function BlowPage() {
   const router = useRouter();
   const { sensorState, testResult, sendCommand, mode } = useKioskContext();
-  const { playSound } = useGlobalSound();
-
-  useEffect(() => {
-    playSound("/sounds/voice_breathing.mp3");
-  }, []);
   const navigatedRef = useRef(false);
   const retryIntervalRef = useRef(null);
   const errorActiveRef = useRef(false);

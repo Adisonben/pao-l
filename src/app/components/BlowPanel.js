@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useGlobalSound } from "@/hooks/useGlobalSound";
 
 /**
  * sensorState values from backend alcohol_state events:
@@ -12,11 +14,11 @@ import { useRouter } from "next/navigation";
  *   timeout, error         → "error"
  */
 export const PHASES = {
-  preparing:  { label: "กำลังเตรียมพร้อม...", color: "text-zinc-400", iconColor: "#71717a" },
-  ready:      { label: "พร้อมแล้ว — เป่าลมได้เลย", color: "text-yellow-400", iconColor: "#facc15" },
-  blowing:    { label: "ตรวจพบลมหายใจ...", color: "text-blue-400", iconColor: "#60a5fa" },
-  flow_error: { label: "เป่าไม่ถูกต้อง กรุณาลองใหม่", color: "text-red-400", iconColor: "#f87171" },
-  error:      { label: "เชื่อมต่อ hardware ล้มเหลว", color: "text-red-500", iconColor: "#ef4444" },
+  preparing:  { label: "กำลังเตรียมพร้อม...", color: "text-zinc-400", iconColor: "#71717a", description: "กำลังเตรียมอุปกรณ์และกำหนดค่าให้พร้อมใช้งาน" },
+  ready:      { label: "พร้อมแล้ว เป่าลมได้เลย!", color: "text-green-400", iconColor: "#86efac", description: "อุปกรณ์พร้อมใช้งานและพร้อมตรวจพบลมหายใจ" },
+  blowing:    { label: "ตรวจพบลมหายใจ...", color: "text-blue-400", iconColor: "#60a5fa", description: "กำลังเข้าสู่การตรวจลมหายใจ" },
+  flow_error: { label: "เป่าไม่ถูกต้อง กรุณาลองใหม่", color: "text-red-400", iconColor: "#f87171", description: "ตรวจพบลมหายใจไม่ถูกต้อง กรุณาลองใหม่" },
+  error:      { label: "เชื่อมต่ออุปกรณ์ล้มเหลว", color: "text-red-500", iconColor: "#ef4444", description: "มีปัญหาในการเชื่อมต่อกับอุปกรณ์ กรุณาตรวจสอบเครื่องมือและลองใหม่" },
 };
 
 export function sensorStateToPhase(sensorState) {
@@ -35,9 +37,18 @@ export function sensorStateToPhase(sensorState) {
 
 export default function BlowPanel({ sensorState, errorAttempt = null, maxRetry = 0 }) {
   const router = useRouter();
+  const { playSound } = useGlobalSound();
   const phase = sensorStateToPhase(sensorState);
+  const previousPhaseRef = useRef(phase);
 
   const current = PHASES[phase] ?? PHASES.preparing;
+
+  useEffect(() => {
+    if (phase === "ready" && previousPhaseRef.current !== "ready") {
+      playSound("/sounds/voice_breathing.mp3");
+    }
+    previousPhaseRef.current = phase;
+  }, [phase, playSound]);
 
   return (
     <div className="flex h-screen flex-col bg-[#0f0f0f]">
@@ -61,7 +72,7 @@ export default function BlowPanel({ sensorState, errorAttempt = null, maxRetry =
           Alcohol Breath Test
         </span>
         <div className="mt-4 h-px w-16 bg-yellow-400/30" />
-        <h1 className="mt-4 text-lg font-semibold leading-relaxed text-white">
+        <h1 className="mt-4 text-2xl font-semibold leading-relaxed text-white">
           ทดสอบระดับแอลกอฮอล์
         </h1>
       </div>
@@ -81,7 +92,7 @@ export default function BlowPanel({ sensorState, errorAttempt = null, maxRetry =
           <BlowIcon color={current.iconColor} />
         </motion.div>
 
-        <div className="relative h-10 w-full flex items-center justify-center">
+        <div className="relative h-30 w-full">
           <AnimatePresence mode="wait">
             <motion.p
               key={phase}
@@ -89,36 +100,35 @@ export default function BlowPanel({ sensorState, errorAttempt = null, maxRetry =
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.35 }}
-              className={`text-base font-semibold tracking-wide ${current.color}`}
+              className={`text-3xl font-semibold tracking-wide ${current.color}`}
             >
               {current.label}
             </motion.p>
           </AnimatePresence>
+          <AnimatePresence mode="wait">
+            <motion.p
+                key="hint-ready"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="text-lg text-zinc-600"
+              >
+                {current.description}
+            </motion.p>
+            {errorAttempt !== null ? (
+              <motion.p
+                key="hint-error"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="text-xs text-red-400"
+              >
+                เชื่อมต่อใหม่ (ครั้งที่ {errorAttempt}{maxRetry ? `/${maxRetry}` : ""})
+              </motion.p>
+            ) : null}
+          </AnimatePresence>
         </div>
 
-        <AnimatePresence mode="wait">
-          {phase === "ready" ? (
-            <motion.p
-              key="hint-ready"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="text-xs text-zinc-600"
-            >
-              กรุณาเป่าลมเข้าท่อ
-            </motion.p>
-          ) : errorAttempt !== null ? (
-            <motion.p
-              key="hint-error"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="text-xs text-red-400"
-            >
-              เชื่อมต่อใหม่ (ครั้งที่ {errorAttempt}{maxRetry ? `/${maxRetry}` : ""})
-            </motion.p>
-          ) : null}
-        </AnimatePresence>
       </div>
 
       {/* ── FOOTER ── */}
@@ -138,8 +148,8 @@ function BlowIcon({ color }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={100}
-      height={100}
+      width={250}
+      height={250}
       viewBox="0 0 64 64"
       fill="none"
       stroke={color}
