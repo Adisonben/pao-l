@@ -78,10 +78,10 @@ export default function ResultPanel({
     <div className="flex h-screen flex-col bg-[#0f0f0f]">
 
       {/* ── HEADER ── */}
-      <div className="flex flex-col items-center gap-1 px-4 pt-6">
+      <div className="flex flex-col items-center gap-1 px-4 pt-2">
         <button
           onClick={() => router.push("/")}
-          className="mb-2 flex items-center gap-1 self-start text-xs text-zinc-600 transition-colors hover:text-zinc-400"
+          className=" flex items-center gap-1 self-start text-xs text-zinc-600 transition-colors hover:text-zinc-400"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width={14} height={14} viewBox="0 0 24 24"
             fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -95,7 +95,7 @@ export default function ResultPanel({
         <span className="text-xs font-medium uppercase tracking-[0.25em] text-zinc-500">
           Alcohol Breath Test
         </span>
-        <div className="mt-2 xl:mt-3 h-px w-12 bg-yellow-400/30" />
+        <div className="h-px w-12 bg-yellow-400/30" />
       </div>
 
       <p className="text-center pt-2 text-white">ผลการตรวจวัดระดับแอลกอฮอล์ในลมหายใจ</p>
@@ -158,7 +158,7 @@ export default function ResultPanel({
             className="font-semibold text-start w-full"
           >
             <span className="text-zinc-400 text-base xl:text-lg">อาการที่พบ:</span> <br />
-            <span className="text-zinc-200 text-xl xl:text-2xl">{tier.symptom}</span>
+            <span className="text-zinc-200 text-xl">{tier.symptom}</span>
           </motion.p>
           <motion.p
             initial={{ opacity: 0, y: 8 }}

@@ -21,21 +21,42 @@ export default function ResultPage() {
   }, [sendCommand, router, mode]);
 
   return (
-    <main className="flex h-screen w-screen overflow-hidden">
-      <div className="w-[70%]">
-        <AdPanel />
+    // <main className="flex h-screen w-screen overflow-hidden">
+    //   <div className="w-[70%]">
+    //     <AdPanel />
+    //   </div>
+    //   <div className="w-[30%]">
+    //     <ResultPanel
+    //       result={result}
+    //       value={value}
+    //       onDone={mode === "interface" ? undefined : handleDone}
+    //       manualMessage={
+    //         mode === "interface"
+    //           ? "Interface mode — use the controls to navigate when ready"
+    //           : undefined
+    //       }
+    //     />
+    //   </div>
+    // </main>
+    <main className="flex h-screen overflow-hidden bg-black">
+      <div className="flex w-[70%] flex-col p-6 pb-6">
+        <div className="flex-1 overflow-hidden rounded-3xl bg-black/90">
+          <AdPanel />
+        </div>
       </div>
-      <div className="w-[30%]">
-        <ResultPanel
-          result={result}
-          value={value}
-          onDone={mode === "interface" ? undefined : handleDone}
-          manualMessage={
-            mode === "interface"
-              ? "Interface mode — use the controls to navigate when ready"
-              : undefined
-          }
-        />
+      <div className="flex w-[30%] flex-col p-6 pb-6">
+        <div className="flex-1 overflow-hidden rounded-3xl">
+          <ResultPanel
+            result={result}
+            value={value}
+            onDone={mode === "interface" ? undefined : handleDone}
+            manualMessage={
+              mode === "interface"
+                ? "Interface mode — use the controls to navigate when ready"
+                : undefined
+            }
+          />
+        </div>
       </div>
     </main>
   );
