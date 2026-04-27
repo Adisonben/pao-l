@@ -95,7 +95,7 @@ export default function BlowPage() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <main className="flex h-screen overflow-hidden">
+    <main className="flex h-screen overflow-hidden bg-black">
       <div className="flex w-[70%] flex-col p-6 pb-6">
         <div className="flex-1 overflow-hidden rounded-3xl bg-black/90">
           <InstructionPanel />

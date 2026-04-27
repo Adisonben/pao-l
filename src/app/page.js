@@ -22,7 +22,7 @@ export default function Home() {
   };
 
   return (
-    <main className="flex h-screen overflow-hidden">
+    <main className="flex h-screen overflow-hidden bg-black">
       <div className="flex w-[65%] xl:w-[70%] flex-col lg:p-6 p-4 pb-4">
         <div className="flex-1 overflow-hidden rounded-3xl bg-black/90">
           <AdPanel />
