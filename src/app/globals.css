@@ -53,19 +53,9 @@ body {
 }
 
 .frame {
-  width: 300px;
-  height: 320px;
+  width: 180px;
+  height: 180px;
   position: relative;
-
-  @media (max-width: 1600px) {
-    width: 240px;
-    height: 256px;
-  }
-
-  @media (max-height: 800px) {
-    width: 200px;
-    height: 213px;
-  }
 }
 
 .frame img {
@@ -73,9 +63,9 @@ body {
   height: 100%;
   object-fit: cover;
   /* fill frame */
-  object-position: center;
+  object-position: 55% -50%;
   /* center character */
-  transform: scale(1.6);
+  transform: scale(2);
   /* zoom */
 }
 

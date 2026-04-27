@@ -14,24 +14,24 @@ import { useGlobalSound } from "@/hooks/useGlobalSound";
  *   timeout, error         → "error"
  */
 export const PHASES = {
-  preparing:  { label: "กำลังเตรียมพร้อม...", color: "text-zinc-400", iconColor: "#71717a", description: "กำลังเตรียมอุปกรณ์และกำหนดค่าให้พร้อมใช้งาน" },
-  ready:      { label: "พร้อมแล้ว เป่าลมได้เลย!", color: "text-green-400", iconColor: "#86efac", description: "อุปกรณ์พร้อมใช้งานและพร้อมตรวจพบลมหายใจ" },
-  blowing:    { label: "ตรวจพบลมหายใจ...", color: "text-blue-400", iconColor: "#60a5fa", description: "กำลังเข้าสู่การตรวจลมหายใจ" },
+  preparing: { label: "กำลังเตรียมพร้อม...", color: "text-zinc-400", iconColor: "#71717a", description: "กำลังเตรียมอุปกรณ์และกำหนดค่าให้พร้อมใช้งาน" },
+  ready: { label: "พร้อมแล้ว เป่าลมได้เลย!", color: "text-green-400", iconColor: "#86efac", description: "อุปกรณ์พร้อมใช้งานและพร้อมตรวจพบลมหายใจ" },
+  blowing: { label: "ตรวจพบลมหายใจ...", color: "text-blue-400", iconColor: "#60a5fa", description: "กำลังเข้าสู่การตรวจลมหายใจ" },
   flow_error: { label: "เป่าไม่ถูกต้อง กรุณาลองใหม่", color: "text-red-400", iconColor: "#f87171", description: "ตรวจพบลมหายใจไม่ถูกต้อง กรุณาลองใหม่" },
-  error:      { label: "เชื่อมต่ออุปกรณ์ล้มเหลว", color: "text-red-500", iconColor: "#ef4444", description: "มีปัญหาในการเชื่อมต่อกับอุปกรณ์ กรุณาตรวจสอบเครื่องมือและลองใหม่" },
+  error: { label: "เชื่อมต่ออุปกรณ์ล้มเหลว", color: "text-red-500", iconColor: "#ef4444", description: "มีปัญหาในการเชื่อมต่อกับอุปกรณ์ กรุณาตรวจสอบเครื่องมือและลองใหม่" },
 };
 
 export function sensorStateToPhase(sensorState) {
   switch (sensorState) {
-    case "ready":           return "ready";
+    case "ready": return "ready";
     case "sampling":
     case "breath_detected": return "blowing";
-    case "flow_error":      return "flow_error";
+    case "flow_error": return "flow_error";
     case "timeout":
-    case "error":           return "error";
+    case "error": return "error";
     case "connecting":
     case "warming_up":
-    default:                return "preparing";
+    default: return "preparing";
   }
 }
 
@@ -107,13 +107,13 @@ export default function BlowPanel({ sensorState, errorAttempt = null, maxRetry =
           </AnimatePresence>
           <AnimatePresence mode="wait">
             <motion.p
-                key="hint-ready"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="text-base xl:text-lg text-zinc-600"
-              >
-                {current.description}
+              key="hint-ready"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="text-base text-zinc-600"
+            >
+              {current.description}
             </motion.p>
             {errorAttempt !== null ? (
               <motion.p
