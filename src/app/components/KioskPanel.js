@@ -108,7 +108,7 @@ export default function KioskPanel({ onStartTest, wsConnected = false }) {
               <AiOutlineSafety />
             </div>
             <div>
-              <span className="text-lg xl:text-xl">ปลอดภัย</span>
+              <span className="text-lg xl:text-xl text-white">ปลอดภัย</span>
             </div>
           </div>
           <div className="flex items-center gap-1">
@@ -116,7 +116,7 @@ export default function KioskPanel({ onStartTest, wsConnected = false }) {
               <SiCodefresh />
             </div>
             <div>
-              <span className="text-lg xl:text-xl">สะอาด</span>
+              <span className="text-lg xl:text-xl text-white">สะอาด</span>
             </div>
           </div>
           <div className="flex items-center gap-1">
@@ -124,7 +124,7 @@ export default function KioskPanel({ onStartTest, wsConnected = false }) {
               <TbWind />
             </div>
             <div>
-              <span className="text-lg xl:text-xl">รวดเร็ว</span>
+              <span className="text-lg xl:text-xl text-white">รวดเร็ว</span>
             </div>
           </div>
         </motion.div>
