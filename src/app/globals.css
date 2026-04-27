@@ -63,7 +63,7 @@ body {
   height: 100%;
   object-fit: cover;
   /* fill frame */
-  object-position: 55% -50%;
+  object-position: 55% -20%;
   /* center character */
   transform: scale(2);
   /* zoom */
