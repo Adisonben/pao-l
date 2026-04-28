@@ -165,3 +165,50 @@ def measurement_worker(event_queue: asyncio.Queue, loop: asyncio.AbstractEventLo
                 pass
         _is_sensor_active = False
         asyncio.run_coroutine_threadsafe(event_queue.put(None), loop)  # sentinel
+
+
+def reset_sensor_hardware():
+    """
+    Hardware-level reset logic:
+    - If state is $STANBY -> send $RESET
+    - If state is $END -> send $START, wait for $STANBY, then send $RESET
+    """
+    port = auto_detect_port()
+    if not port or serial is None:
+        return False
+
+    ser = None
+    try:
+        ser = serial.Serial(
+            port=port, baudrate=BAUDRATE, bytesize=DATA_BITS,
+            stopbits=STOP_BITS, parity=PARITY, timeout=0.5,
+        )
+
+        # 1. Try to find current state (read for up to 2 seconds)
+        state = None
+        for _ in range(10):
+            line = ser.readline().decode("ascii", errors="replace").strip()
+            state = parse_state(line)
+            if state:
+                break
+
+        if state == "$STANBY":
+            ser.write(CMD_RESET)
+            ser.flush()
+        elif state == "$END":
+            ser.write(CMD_START)
+            ser.flush()
+            # Wait for $STANBY (up to 5 seconds)
+            for _ in range(10):
+                line = ser.readline().decode("ascii", errors="replace").strip()
+                if parse_state(line) == "$STANBY":
+                    ser.write(CMD_RESET)
+                    ser.flush()
+                    break
+
+        return True
+    except Exception:
+        return False
+    finally:
+        if ser and ser.is_open:
+            ser.close()

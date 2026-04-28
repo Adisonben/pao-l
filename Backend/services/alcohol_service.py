@@ -104,6 +104,8 @@ class AlcoholService:
                     self._start_measurement(session_id)
                 elif cmd_type in ("STOP_ALCOHOL", "RESET"):
                     self._stop_measurement()
+                elif cmd_type == "RESET_SENSOR":
+                    self._reset_sensor()
         except asyncio.CancelledError:
             pass
 
@@ -132,6 +134,17 @@ class AlcoholService:
             self._worker_thread.join(timeout=3)
         self._worker_thread = None
         logger.info("AlcoholService: measurement stopped")
+
+    def _reset_sensor(self) -> None:
+        """Trigger hardware reset in a background thread."""
+        from functions.alcohol import reset_sensor_hardware
+        
+        def run():
+            logger.info("AlcoholService: starting hardware reset")
+            success = reset_sensor_hardware()
+            logger.info("AlcoholService: hardware reset %s", "success" if success else "failed")
+            
+        threading.Thread(target=run, daemon=True, name="alcohol-reset").start()
 
     # ── Sensor worker thread ──────────────────────────────────
 

@@ -23,6 +23,7 @@ HEARTBEAT_INTERVAL = 15.0  # seconds between pings
 _COMMAND_MAP = {
     "START_TEST": "START_ALCOHOL",
     "RESET": "STOP_ALCOHOL",
+    "RESET_SENSOR": "RESET_SENSOR",
 }
 
 

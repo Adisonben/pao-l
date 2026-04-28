@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useGlobalSound } from "@/hooks/useGlobalSound";
+import { SiCodefresh } from "react-icons/si";
+import { useKioskContext } from "@/context/KioskContext";
 
 const COUNTDOWN_SEC = 10;
 
@@ -55,10 +57,12 @@ export default function ResultPanel({
   const tier = getAlcoholLevel(value);
   console.log(isManual);
   const { playSound } = useGlobalSound();
+  const { sendCommand } = useKioskContext();
 
   useEffect(() => {
     if (isManual) return undefined;
     if (countdown <= 0) {
+      sendCommand("RESET_SENSOR");
       if (onDone) onDone();
       else router.push("/");
       return undefined;
@@ -75,7 +79,7 @@ export default function ResultPanel({
   }, [tier.level, tier.soundFolder, isManual]);
 
   return (
-    <div className="flex h-screen flex-col bg-[#0f0f0f]">
+    <div className="flex h-full flex-col bg-[#0f0f0f]">
 
       {/* ── HEADER ── */}
       <div className="flex flex-col items-center gap-1 px-4 pt-2">
@@ -101,8 +105,8 @@ export default function ResultPanel({
       <p className="text-center pt-2 text-white">ผลการตรวจวัดระดับแอลกอฮอล์ในลมหายใจ</p>
 
       {/* ── MAIN ── */}
-      <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 py-4 text-center">
-        <div className="bg-[#833535] flex flex-1 flex-col items-center justify-center gap-2 px-6 pt-2 text-center rounded-4xl"
+      <div className="flex flex-col items-center justify-center gap-3 px-6 py-4 text-center">
+        <div className="bg-[#833535] flex flex-1 flex-col items-center justify-center gap-2 px-6 py-6 text-center rounded-4xl"
           style={{
             background: `${tier.color}20`,
             border: `2px solid ${tier.color}`,
@@ -185,38 +189,43 @@ export default function ResultPanel({
               <span className="text-sm text-zinc-400 tracking-widest uppercase">mg%</span>
             </motion.div>
           )} */}
-
-          {/* Countdown / manual */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.1, duration: 0.6 }}
-            className="text-sm text-zinc-600"
-          >
-            {isManual ? (
-              <span
-                className="rounded-lg px-3 py-1.5 text-sm font-medium"
-                style={{ background: tier.bg, color: tier.color }}
-              >
-                {manualMessage}
-              </span>
-            ) : (
-              <>
-                กลับหน้าหลักใน{" "}
-                <span className="font-bold text-zinc-300">{countdown}</span>{" "}
-                วินาที
-              </>
-            )}
-          </motion.p>
         </div>
       </div>
+
+      {/* Countdown / manual */}
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.1, duration: 0.6 }}
+        className="flex items-center justify-center gap-2 text-sm text-zinc-300"
+      >
+        {isManual ? (
+          <span
+            className="rounded-lg px-3 py-1.5 text-sm font-medium"
+            style={{ background: tier.bg, color: tier.color }}
+          >
+            {manualMessage}
+          </span>
+        ) : (
+          <>
+            <span className="relative flex h-10 w-10 items-center justify-center text-green-500">
+              <span className="absolute inset-0 animate-spin rounded-full border-2 border-green-500/20 border-t-green-500" />
+              <SiCodefresh className="text-lg" />
+            </span>
+            <span className="text-base">
+              กำลังทำความสะอาดเซนเซอร์ (
+              <span className="font-bold text-zinc-300">{countdown}</span> วินาที )
+            </span>
+          </>
+        )}
+      </motion.p>
 
       {/* ── FOOTER ── */}
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.0, duration: 0.6 }}
-        className="pb-3 xl:pb-6 text-center text-xs text-zinc-700"
+        className="mt-auto pb-3 xl:pb-6 text-center text-xs text-zinc-300"
       >
         PAO AL · ขอบคุณที่ใช้บริการ
       </motion.p>
