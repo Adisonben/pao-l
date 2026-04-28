@@ -60,9 +60,12 @@ export default function ResultPanel({
   const { sendCommand } = useKioskContext();
 
   useEffect(() => {
+    sendCommand("RESET_SENSOR");
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
     if (isManual) return undefined;
     if (countdown <= 0) {
-      sendCommand("RESET_SENSOR");
       if (onDone) onDone();
       else router.push("/");
       return undefined;
