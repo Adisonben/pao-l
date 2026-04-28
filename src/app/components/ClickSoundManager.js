@@ -17,7 +17,7 @@ export default function ClickSoundManager() {
 
       // Reset and play for overlapping sounds (basic implementation)
       const sound = audioRef.current.cloneNode();
-      sound.volume = 2.0;
+      sound.volume = 1.0;
       sound.play().catch((err) => {
         // Ignore errors, often caused by browser auto-play policies
         // which are usually unlocked after the first interaction anyway
