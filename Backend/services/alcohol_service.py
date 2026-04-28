@@ -62,7 +62,7 @@ class AlcoholService:
         """Subscribe to command bus and start listening for commands."""
         self._loop = asyncio.get_running_loop()
         self._cmd_queue = await self._command_bus.subscribe(
-            filter_types={"START_ALCOHOL", "STOP_ALCOHOL", "RESET"}
+            filter_types={"START_ALCOHOL", "STOP_ALCOHOL", "RESET", "RESET_SENSOR"}
         )
         self._cmd_listener_task = asyncio.create_task(self._listen_commands())
         logger.info("AlcoholService started")
