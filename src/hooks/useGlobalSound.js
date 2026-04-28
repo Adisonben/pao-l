@@ -1,6 +1,7 @@
 "use client";
 
-import { createContext, useContext, useRef, useState } from "react";
+import { createContext, useContext, useRef, useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 const SOUND_LISTS = {
   welcome: [
@@ -18,6 +19,20 @@ export function GlobalSoundProvider({ children }) {
   const audioRef = useRef(null);
   const [isMuted, setIsMuted] = useState(false);
   const pendingSoundRef = useRef(null);
+  const pathname = usePathname();
+  const stopSound = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current = null;
+    }
+    pendingSoundRef.current = null;
+  };
+
+  // Automatically stop sound on page change
+  useEffect(() => {
+    stopSound();
+  }, [pathname]);
 
   const attachGestureUnlock = () => {
     if (typeof window === "undefined") return;
@@ -44,9 +59,8 @@ export function GlobalSoundProvider({ children }) {
 
     const resolved = SOUND_LISTS[src] ? pickRandom(SOUND_LISTS[src]) : src;
 
-    if (audioRef.current) {
-      audioRef.current.pause();
-    }
+    // Stop current sound before playing new one
+    stopSound();
 
     const audio = new Audio(resolved);
     audio.volume = options.volume || 1;
@@ -65,14 +79,6 @@ export function GlobalSoundProvider({ children }) {
     }
 
     audioRef.current = audio;
-  };
-
-  const stopSound = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-    }
-    pendingSoundRef.current = null;
   };
 
   const mute = () => {
