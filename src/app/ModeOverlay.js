@@ -148,6 +148,19 @@ export default function ModeOverlay() {
             >
               Reset State
             </button>
+            <button
+              type="button"
+              className={buttonBase}
+              onClick={() => {
+                if (!document.fullscreenElement) {
+                  document.documentElement.requestFullscreen();
+                } else {
+                  document.exitFullscreen();
+                }
+              }}
+            >
+              Toggle Fullscreen
+            </button>
           </div>
           <span className="mb-2 block text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-400">
             Mock Tier Result

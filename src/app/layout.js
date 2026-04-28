@@ -5,6 +5,7 @@ import { KioskProvider } from "@/context/KioskContext";
 import ModeOverlay from "./ModeOverlay";
 import ScreenSaver from "./components/ScreenSaver";
 import ClickSoundManager from "./components/ClickSoundManager";
+import FullscreenHandler from "./components/FullscreenHandler";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,6 +30,7 @@ export default function RootLayout({ children }) {
       >
         <GlobalSoundProvider>
           <ClickSoundManager />
+          <FullscreenHandler />
           <KioskProvider>
             {children}
             {/* <ScreenSaver /> */}
