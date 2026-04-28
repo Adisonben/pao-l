@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { BsFullscreen, BsFullscreenExit } from "react-icons/bs";
+import { useAppMode } from "@/hooks/useAppMode";
 
 export default function FullscreenHandler() {
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const mode = useAppMode();
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -14,6 +16,27 @@ export default function FullscreenHandler() {
     document.addEventListener("fullscreenchange", handleFullscreenChange);
     return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
   }, []);
+
+  // Auto-fullscreen on interaction in prod mode
+  useEffect(() => {
+    if (mode !== "prod") return;
+
+    const handleInteraction = () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch((err) => {
+          // Silent catch to avoid console spam in prod
+        });
+      }
+    };
+
+    window.addEventListener("pointerdown", handleInteraction);
+    window.addEventListener("click", handleInteraction);
+    
+    return () => {
+      window.removeEventListener("pointerdown", handleInteraction);
+      window.removeEventListener("click", handleInteraction);
+    };
+  }, [mode]);
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
@@ -27,7 +50,7 @@ export default function FullscreenHandler() {
     }
   };
 
-  if (isFullscreen) return null;
+  if (isFullscreen || mode === "prod") return null;
 
   return (
     <button
