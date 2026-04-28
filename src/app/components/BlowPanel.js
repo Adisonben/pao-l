@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useGlobalSound } from "@/hooks/useGlobalSound";
+import { useKioskContext } from "@/context/KioskContext";
 
 /**
  * sensorState values from backend alcohol_state events:
@@ -38,10 +39,23 @@ export function sensorStateToPhase(sensorState) {
 export default function BlowPanel({ sensorState, errorAttempt = null, maxRetry = 0 }) {
   const router = useRouter();
   const { playSound } = useGlobalSound();
+  const { sendCommand } = useKioskContext();
   const phase = sensorStateToPhase(sensorState);
   const previousPhaseRef = useRef(phase);
 
+  const [countdown, setCountdown] = useState(30);
+
   const current = PHASES[phase] ?? PHASES.preparing;
+
+  useEffect(() => {
+    if (countdown <= 0) {
+      sendCommand("RESET_SENSOR");
+      router.push("/");
+      return undefined;
+    }
+    const t = setTimeout(() => setCountdown((c) => c - 1), 1000);
+    return () => clearTimeout(t);
+  }, [countdown, router, sendCommand]);
 
   useEffect(() => {
     if (phase === "ready" && previousPhaseRef.current !== "ready") {
@@ -132,14 +146,23 @@ export default function BlowPanel({ sensorState, errorAttempt = null, maxRetry =
       </div>
 
       {/* ── FOOTER ── */}
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.8, duration: 0.6 }}
-        className="pb-4 xl:pb-8 text-center text-xs text-zinc-700"
-      >
-        PAO AL · กรุณาเป่าลมให้ต่อเนื่อง 10 วินาที
-      </motion.p>
+      <div className="pb-4 xl:pb-8 flex flex-col items-center gap-1">
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8, duration: 0.6 }}
+          className="text-center text-xs text-zinc-700"
+        >
+          PAO AL · กรุณาเป่าลมให้ต่อเนื่อง 10 วินาที
+        </motion.p>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-[10px] text-zinc-500 font-medium uppercase tracking-widest"
+        >
+          กลับหน้าหลักใน {countdown} วินาที
+        </motion.p>
+      </div>
     </div>
   );
 }
