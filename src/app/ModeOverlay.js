@@ -43,7 +43,6 @@ export default function ModeOverlay() {
   );
 
   const phaseKey = useMemo(() => sensorStateToPhase(sensorState), [sensorState]);
-  const phaseInfo = PHASES[phaseKey];
 
   if (!mode || mode === "prod") {
     return null;
@@ -87,22 +86,6 @@ export default function ModeOverlay() {
           connections are disabled.
         </p>
       </div>
-
-      {/* {phaseInfo ? (
-        <div className={badgeBase}>
-          <div className="flex items-center justify-between gap-4">
-            <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-500">
-              Current phase
-            </span>
-            <span className="text-[11px] text-zinc-400">
-              {sensorState ?? "unknown"}
-            </span>
-          </div>
-          <p className={`mt-2 text-sm font-semibold ${phaseInfo.color}`}>
-            {phaseInfo.label}
-          </p>
-        </div>
-      ) : null} */}
 
       {mockControls?.setSensorState ? (
         <div className={badgeBase}>

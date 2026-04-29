@@ -8,21 +8,36 @@ import { useMockKiosk } from "@/hooks/useMockKiosk";
 const KioskContext = createContext(null);
 
 /**
+ * ProdKioskProvider — uses real WebSocket connection.
+ */
+function ProdKioskProvider({ children }) {
+  const kiosk = useKiosk();
+  const value = { ...kiosk, mockControls: null, mode: "prod" };
+  return <KioskContext.Provider value={value}>{children}</KioskContext.Provider>;
+}
+
+/**
+ * MockKioskProvider — uses mock data for dev/interface modes.
+ */
+function MockKioskProvider({ mode, children }) {
+  const kiosk = useMockKiosk(mode);
+  const { mockControls = null, ...rest } = kiosk;
+  const value = { ...rest, mockControls, mode };
+  return <KioskContext.Provider value={value}>{children}</KioskContext.Provider>;
+}
+
+/**
  * KioskProvider — wraps the whole app, provides WebSocket + sensor state.
- * Navigation is handled by individual pages, not centrally.
+ * Delegates to ProdKioskProvider or MockKioskProvider to avoid
+ * conditional hook calls (React Rules of Hooks).
  */
 export function KioskProvider({ children }) {
   const mode = useAppMode();
-  const baseKiosk = mode === "prod" ? useKiosk() : useMockKiosk(mode);
 
-  const { mockControls = null, ...rest } = baseKiosk;
-  const value = {
-    ...rest,
-    mockControls,
-    mode,
-  };
-
-  return <KioskContext.Provider value={value}>{children}</KioskContext.Provider>;
+  if (mode === "prod") {
+    return <ProdKioskProvider>{children}</ProdKioskProvider>;
+  }
+  return <MockKioskProvider mode={mode}>{children}</MockKioskProvider>;
 }
 
 export function useKioskContext() {

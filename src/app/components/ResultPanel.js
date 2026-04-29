@@ -142,14 +142,6 @@ export default function ResultPanel({
             transition={{ delay: 0.6, type: "spring", stiffness: 200, damping: 20 }}
             className="flex flex-col items-center gap-1"
           >
-            {/* {tier.level > 0 && (
-              <span
-                className="text-xs font-bold px-3 py-0.5 rounded-full"
-                style={{ background: tier.color, color: "#0f0f0f" }}
-              >
-                ระดับที่ {tier.level}
-              </span>
-            )} */}
             <span className="text-4xl font-black" style={{ color: tier.color }}>
               {tier.nickname}
             </span>
@@ -176,22 +168,6 @@ export default function ResultPanel({
             <span className="text-zinc-400 text-sm xl:text-md">คำแนะนำ:</span> <br />
             <span className="text-zinc-200 text-sm xl:text-md">{ADVICE[tier.level]}</span>
           </motion.p>
-
-          {/* BAC Value */}
-          {/* {value !== null && value >= 0 && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.85 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.9, type: "spring", stiffness: 200, damping: 20 }}
-              className="flex flex-col items-center gap-0.5 rounded-xl px-6 py-3"
-              style={{ background: tier.bg, borderColor: tier.color, border: `1px solid ${tier.color}40` }}
-            >
-              <span className="text-4xl font-black tabular-nums" style={{ color: tier.color }}>
-                {(value * 1000).toFixed(1)}
-              </span>
-              <span className="text-sm text-zinc-400 tracking-widest uppercase">mg%</span>
-            </motion.div>
-          )} */}
         </div>
       </div>
 
