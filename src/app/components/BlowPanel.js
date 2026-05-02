@@ -58,7 +58,10 @@ export default function BlowPanel({ sensorState, errorAttempt = null, maxRetry =
   }, [countdown, router, sendCommand]);
 
   useEffect(() => {
-    if (phase === "ready" && previousPhaseRef.current !== "ready") {
+    // if (phase === "ready" && previousPhaseRef.current !== "ready") {
+    //   playSound("/sounds/voice_breathing.mp3");
+    // }
+    if (phase === "ready") {
       playSound("/sounds/voice_breathing.mp3");
     }
     previousPhaseRef.current = phase;
