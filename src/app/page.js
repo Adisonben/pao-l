@@ -12,9 +12,9 @@ export default function Home() {
   const { sendCommand, wsConnected } = useKioskContext();
   const { playSound } = useGlobalSound();
 
-  // useEffect(() => {
-  //   playSound("welcome");
-  // }, []);
+  useEffect(() => {
+    playSound("welcome");
+  }, []);
 
   const handleStartTest = () => {
     sendCommand("START_TEST");

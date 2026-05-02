@@ -79,7 +79,7 @@ export default function ResultPanel({
     const soundPath = getRandomSoundPath(tier.soundFolder, tier.level);
 
     playSound(soundPath);
-  }, []);
+  }, [tier.level]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="flex h-full flex-col bg-[#0f0f0f]">

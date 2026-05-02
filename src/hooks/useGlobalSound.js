@@ -20,6 +20,8 @@ export function GlobalSoundProvider({ children }) {
   const [isMuted, setIsMuted] = useState(false);
   const pendingSoundRef = useRef(null);
   const pathname = usePathname();
+  const soundPathnameRef = useRef(pathname);
+
   const stopSound = () => {
     if (audioRef.current) {
       audioRef.current.pause();
@@ -31,27 +33,44 @@ export function GlobalSoundProvider({ children }) {
 
   // Automatically stop sound on page change
   useEffect(() => {
-    stopSound();
+    if (pathname !== soundPathnameRef.current) {
+      stopSound();
+    }
   }, [pathname]);
+
+  const unlockAudio = () => {
+    if (typeof window === "undefined") return;
+    
+    // Create and play a tiny silent sound to unlock the audio system
+    const silentAudio = new Audio("data:audio/wav;base64,UklGRigAAABXQVZFRm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA== ");
+    silentAudio.play().catch(() => {});
+    
+    // Resume AudioContext if it exists (some browsers need this)
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (AudioContext) {
+      const ctx = new AudioContext();
+      if (ctx.state === "suspended") ctx.resume();
+    }
+
+    const pending = pendingSoundRef.current;
+    if (pending) {
+      pendingSoundRef.current = null;
+      playSound(pending.src, pending.options);
+    }
+    
+    // Remove listeners once unlocked
+    const events = ["pointerdown", "mousedown", "touchend", "keydown", "click"];
+    events.forEach((event) => {
+      window.removeEventListener(event, unlockAudio);
+    });
+  };
 
   const attachGestureUnlock = () => {
     if (typeof window === "undefined") return;
-    const pending = pendingSoundRef.current;
-    if (!pending || pending.unlockAttached) return;
-
-    const attemptPlay = () => {
-      const queued = pendingSoundRef.current;
-      pendingSoundRef.current = null;
-      if (!queued) return;
-      playSound(queued.src, queued.options);
-    };
-
-    const events = ["pointerdown", "mousedown", "touchend", "keydown", "click"]; 
+    const events = ["pointerdown", "mousedown", "touchend", "keydown", "click"];
     events.forEach((event) => {
-      window.addEventListener(event, attemptPlay, { once: true, passive: true });
+      window.addEventListener(event, unlockAudio, { once: true, passive: true });
     });
-
-    pendingSoundRef.current = { ...pending, unlockAttached: true };
   };
 
   const playSound = (src, options = {}) => {
@@ -65,6 +84,7 @@ export function GlobalSoundProvider({ children }) {
     const audio = new Audio(resolved);
     audio.volume = options.volume || 1;
     audio.loop = options.loop || false;
+    soundPathnameRef.current = pathname; // Track which page this sound belongs to
 
     const playPromise = audio.play();
     if (playPromise && typeof playPromise.catch === "function") {
