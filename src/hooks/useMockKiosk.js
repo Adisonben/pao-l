@@ -25,6 +25,7 @@ export function useMockKiosk(mode = "dev") {
   const [sensorState, setSensorState] = useState("ready");
   const [sensorMessage, setSensorMessage] = useState(messageForState("ready"));
   const [testResult, setTestResult] = useState(null);
+  const [resetResult, setResetResult] = useState(null);
   const [lastEvent, setLastEvent] = useState(null);
 
   const timersRef = useRef([]);
@@ -121,8 +122,17 @@ export function useMockKiosk(mode = "dev") {
       if (normalized === "RESET") {
         resetState();
       }
+
+      if (normalized === "RESET_SENSOR") {
+        // Simulate backend reset delay
+        const id = setTimeout(() => {
+          setResetResult({ success: true });
+          setLastEvent({ type: "reset_result", success: true });
+        }, 1500);
+        timersRef.current.push(id);
+      }
     },
-    [mode, startTimeline, emitState, resetState]
+    [mode, startTimeline, emitState, resetState, clearTimers]
   );
 
   const mockControls = useMemo(() => {
@@ -160,6 +170,7 @@ export function useMockKiosk(mode = "dev") {
     sensorState,
     sensorMessage,
     testResult,
+    resetResult,
     lastEvent,
     sendCommand,
     mockControls,

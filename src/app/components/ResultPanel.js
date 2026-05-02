@@ -7,8 +7,6 @@ import { useGlobalSound } from "@/hooks/useGlobalSound";
 import { SiCodefresh } from "react-icons/si";
 import { useKioskContext } from "@/context/KioskContext";
 
-const COUNTDOWN_SEC = 10;
-
 const ALCOHOL_TIERS = [
   { level: 0, nickname: "ข้อผิดพลาด", symptom: "ไม่สามารถอ่านค่าได้", color: "#71717a", bg: "rgba(113,113,122,0.12)", minMg: -Infinity, maxMg: -1, icon_path: "", soundFolder: null },
   { level: 1, nickname: "สุภาพชน", symptom: "หน้าเริ่มตึงนิดๆ แต่ทรงยังเป๊ะ", color: "#4ade80", bg: "rgba(74,222,128,0.10)", minMg: 0, maxMg: 30, icon_path: "characters/level1.png", soundFolder: "sounds/result/level_1" },
@@ -52,32 +50,35 @@ export default function ResultPanel({
   manualMessage,
 }) {
   const router = useRouter();
-  const [countdown, setCountdown] = useState(COUNTDOWN_SEC);
   const isManual = Boolean(manualMessage);
   const tier = getAlcoholLevel(value);
-  console.log(isManual);
   const { playSound } = useGlobalSound();
-  const { sendCommand } = useKioskContext();
+  const { sendCommand, resetResult } = useKioskContext();
+  const [resetting, setResetting] = useState(false);
 
+  // Send RESET_SENSOR on mount
   useEffect(() => {
     sendCommand("RESET_SENSOR");
+    setResetting(true);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Navigate home when backend confirms reset success
   useEffect(() => {
-    if (isManual) return undefined;
-    if (countdown <= 0) {
+    if (!resetResult || !resetting) return;
+    if (resetResult.success) {
       if (onDone) onDone();
       else router.push("/");
-      return undefined;
+    } else {
+      // Reset failed — retry once more
+      console.warn("[ResultPanel] Reset failed, retrying...");
+      sendCommand("RESET_SENSOR");
     }
-    const t = setTimeout(() => setCountdown((c) => c - 1), 1000);
-    return () => clearTimeout(t);
-  }, [countdown, router, onDone, isManual]);
+  }, [resetResult]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Play result sound
   useEffect(() => {
     if (tier.level === 0 || !tier.soundFolder) return;
     const soundPath = getRandomSoundPath(tier.soundFolder, tier.level);
-
     playSound(soundPath);
   }, [tier.level]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -127,7 +128,7 @@ export default function ResultPanel({
                 className="text-xl font-bold px-3 py-0.5 rounded-full"
                 style={{ background: tier.color, color: "#0f0f0f" }}
               >
-                ระดับที่ {tier.level}
+                ระดับที่ {tier.level} ({value * 1000} mg%)
               </span>
             )}
           </motion.div>
@@ -171,7 +172,7 @@ export default function ResultPanel({
         </div>
       </div>
 
-      {/* Countdown / manual */}
+      {/* Resetting status / manual */}
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -192,8 +193,7 @@ export default function ResultPanel({
               <SiCodefresh className="text-lg" />
             </span>
             <span className="text-base">
-              กำลังทำความสะอาดเซนเซอร์ (
-              <span className="font-bold text-zinc-300">{countdown}</span> วินาที )
+              กำลังทำความสะอาดเซนเซอร์...
             </span>
           </>
         )}

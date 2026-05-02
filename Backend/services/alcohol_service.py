@@ -143,6 +143,11 @@ class AlcoholService:
             logger.info("AlcoholService: starting hardware reset")
             success = reset_sensor_hardware()
             logger.info("AlcoholService: hardware reset %s", "success" if success else "failed")
+            # Publish reset result back to frontend
+            self._event_bus.publish_threadsafe(
+                {"type": "reset_result", "success": success},
+                self._loop,
+            )
             
         threading.Thread(target=run, daemon=True, name="alcohol-reset").start()
 

@@ -27,6 +27,7 @@ export function useKiosk() {
   const [sensorState, setSensorState] = useState(null);
   const [sensorMessage, setSensorMessage] = useState(null);
   const [testResult, setTestResult] = useState(null);
+  const [resetResult, setResetResult] = useState(null);
   const [lastEvent, setLastEvent] = useState(null);
 
   const connect = useCallback(() => {
@@ -90,6 +91,12 @@ export function useKiosk() {
         console.log("[WS] Test result:", data);
         return;
       }
+
+      if (type === "reset_result") {
+        setResetResult({ success: data.success });
+        console.log("[WS] Reset result:", data);
+        return;
+      }
     };
 
     ws.onerror = () => {
@@ -130,6 +137,7 @@ export function useKiosk() {
     sensorState,
     sensorMessage,
     testResult,
+    resetResult,
     lastEvent,
     sendCommand,
   };
