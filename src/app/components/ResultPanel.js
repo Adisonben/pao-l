@@ -54,26 +54,35 @@ export default function ResultPanel({
   const tier = getAlcoholLevel(value);
   const { playSound } = useGlobalSound();
   const { sendCommand, resetResult } = useKioskContext();
-  const [resetting, setResetting] = useState(false);
+  const [minTimeElapsed, setMinTimeElapsed] = useState(false);
+  const [resetSucceeded, setResetSucceeded] = useState(false);
 
-  // Send RESET_SENSOR on mount
+  // Send RESET_SENSOR on mount + start minimum display timer
   useEffect(() => {
     sendCommand("RESET_SENSOR");
-    setResetting(true);
+    const timer = setTimeout(() => setMinTimeElapsed(true), 10_000);
+    return () => clearTimeout(timer);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Navigate home when backend confirms reset success
+  // Track reset success from backend
   useEffect(() => {
-    if (!resetResult || !resetting) return;
+    if (!resetResult) return;
     if (resetResult.success) {
-      if (onDone) onDone();
-      else router.push("/");
+      setResetSucceeded(true);
     } else {
-      // Reset failed — retry once more
+      // Reset failed — retry
       console.warn("[ResultPanel] Reset failed, retrying...");
       sendCommand("RESET_SENSOR");
     }
   }, [resetResult]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Navigate home when BOTH minimum time elapsed AND reset succeeded
+  useEffect(() => {
+    if (!minTimeElapsed || !resetSucceeded) return;
+    if (isManual) return;
+    if (onDone) onDone();
+    else router.push("/");
+  }, [minTimeElapsed, resetSucceeded]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Play result sound
   useEffect(() => {
