@@ -161,7 +161,7 @@ export default function BlowPanel({ sensorState, errorAttempt = null, maxRetry =
           animate={{ opacity: 1 }}
           className="text-[10px] text-zinc-500 font-medium uppercase tracking-widest"
         >
-          กลับหน้าหลักใน {countdown >= 60 ? `${Math.ceil(countdown / 60)} นาที` : `${countdown} วินาที`}
+          กลับหน้าหลักใน {countdown} วินาที
         </motion.p>
       </div>
     </div>
