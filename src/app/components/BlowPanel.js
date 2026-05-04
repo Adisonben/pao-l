@@ -43,7 +43,7 @@ export default function BlowPanel({ sensorState, errorAttempt = null, maxRetry =
   const phase = sensorStateToPhase(sensorState);
   const previousPhaseRef = useRef(phase);
 
-  const [countdown, setCountdown] = useState(30);
+  const [countdown, setCountdown] = useState(600);
 
   const current = PHASES[phase] ?? PHASES.preparing;
 
@@ -161,7 +161,7 @@ export default function BlowPanel({ sensorState, errorAttempt = null, maxRetry =
           animate={{ opacity: 1 }}
           className="text-[10px] text-zinc-500 font-medium uppercase tracking-widest"
         >
-          กลับหน้าหลักใน {countdown} วินาที
+          กลับหน้าหลักใน {countdown >= 60 ? `${Math.ceil(countdown / 60)} นาที` : `${countdown} วินาที`}
         </motion.p>
       </div>
     </div>

@@ -54,14 +54,13 @@ export default function ResultPanel({
   const tier = getAlcoholLevel(value);
   const { playSound } = useGlobalSound();
   const { sendCommand, resetResult } = useKioskContext();
-  const [minTimeElapsed, setMinTimeElapsed] = useState(false);
+  const [countdown, setCountdown] = useState(10);
+  const [elapsedTime, setElapsedTime] = useState(0);
   const [resetSucceeded, setResetSucceeded] = useState(false);
 
-  // Send RESET_SENSOR on mount + start minimum display timer
+  // Send RESET_SENSOR on mount
   useEffect(() => {
     sendCommand("RESET_SENSOR");
-    const timer = setTimeout(() => setMinTimeElapsed(true), 10_000);
-    return () => clearTimeout(timer);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Track reset success from backend
@@ -74,15 +73,30 @@ export default function ResultPanel({
       console.warn("[ResultPanel] Reset failed, retrying...");
       sendCommand("RESET_SENSOR");
     }
-  }, [resetResult]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [resetResult, sendCommand]);
 
-  // Navigate home when BOTH minimum time elapsed AND reset succeeded
+  // Countdown logic: 10s initially, then 5s loops until reset success
   useEffect(() => {
-    if (!minTimeElapsed || !resetSucceeded) return;
     if (isManual) return;
-    if (onDone) onDone();
-    else router.push("/");
-  }, [minTimeElapsed, resetSucceeded]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    if (countdown > 0) {
+      const timer = setTimeout(() => {
+        setCountdown((c) => c - 1);
+        setElapsedTime((e) => e + 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else {
+      // Check for success when countdown hits 0
+      if (resetSucceeded) {
+        if (onDone) onDone();
+        else router.push("/");
+      } else {
+        // Still not ready, wait another 5 seconds
+        setCountdown(5);
+        // Note: we continue incrementing elapsedTime via the next countdown cycle
+      }
+    }
+  }, [countdown, resetSucceeded, isManual, onDone, router]);
 
   // Play result sound
   useEffect(() => {
@@ -202,7 +216,7 @@ export default function ResultPanel({
               <SiCodefresh className="text-lg" />
             </span>
             <span className="text-base">
-              กำลังทำความสะอาดเซนเซอร์...
+              กำลังทำความสะอาดเซนเซอร์... ({elapsedTime} วินาที)
             </span>
           </>
         )}

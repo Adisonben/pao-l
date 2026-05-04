@@ -73,3 +73,5 @@ Fix USB permission
 
 ถูกตัดออก (ไม่ได้ import อีกต่อไป)
 Watchdog, DeviceManager, KioskController, SessionManager, UIEventAdapter, REST API, FingerprintService
+
+$U/B,L/007,H/050,T/0234
