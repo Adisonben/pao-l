@@ -169,45 +169,62 @@ def measurement_worker(event_queue: asyncio.Queue, loop: asyncio.AbstractEventLo
 
 def reset_sensor_hardware():
     """
-    Hardware-level reset logic:
-    - If state is $STANBY -> send $RESET
-    - If state is $END -> send $START, wait for $STANBY, then send $RESET
+    Hardware-level reset: send $START → wait for $STANBY → send $RESET.
+    Returns True only after $STANBY is confirmed and $RESET is sent.
+    Timeout: 10 minutes.
     """
+    import logging
+    logger = logging.getLogger(__name__)
+
+    RESET_TIMEOUT = 600  # 10 minutes
+    SERIAL_READ_TIMEOUT = 0.5
+
     port = auto_detect_port()
     if not port or serial is None:
+        logger.warning("reset_sensor_hardware: no port or pyserial unavailable")
         return False
 
     ser = None
     try:
         ser = serial.Serial(
             port=port, baudrate=BAUDRATE, bytesize=DATA_BITS,
-            stopbits=STOP_BITS, parity=PARITY, timeout=0.5,
+            stopbits=STOP_BITS, parity=PARITY, timeout=SERIAL_READ_TIMEOUT,
         )
 
-        # 1. Try to find current state (read for up to 2 seconds)
-        state = None
-        for _ in range(10):
-            line = ser.readline().decode("ascii", errors="replace").strip()
-            state = parse_state(line)
+        # Send $START to begin the sensor cycle
+        ser.write(CMD_START)
+        ser.flush()
+        logger.info("reset_sensor_hardware: sent $START, waiting for $STANBY (timeout=%ds)", RESET_TIMEOUT)
+
+        # Wait for $STANBY (up to 10 minutes)
+        deadline = time.time() + RESET_TIMEOUT
+        stanby_received = False
+
+        while time.time() < deadline:
+            raw = ser.readline().decode("ascii", errors="replace").strip()
+            if not raw:
+                continue
+
+            state = parse_state(raw)
             if state:
+                logger.debug("reset_sensor_hardware: received state %s", state)
+
+            if state == "$STANBY":
+                stanby_received = True
                 break
 
-        if state == "$STANBY":
-            ser.write(CMD_RESET)
-            ser.flush()
-        elif state == "$END":
-            ser.write(CMD_START)
-            ser.flush()
-            # Wait for $STANBY (up to 5 seconds)
-            for _ in range(10):
-                line = ser.readline().decode("ascii", errors="replace").strip()
-                if parse_state(line) == "$STANBY":
-                    ser.write(CMD_RESET)
-                    ser.flush()
-                    break
+        if not stanby_received:
+            logger.warning("reset_sensor_hardware: timed out waiting for $STANBY")
+            return False
 
+        # $STANBY confirmed — send $RESET
+        ser.write(CMD_RESET)
+        ser.flush()
+        logger.info("reset_sensor_hardware: $STANBY received, sent $RESET — success")
         return True
-    except Exception:
+
+    except Exception as exc:
+        logger.exception("reset_sensor_hardware: error — %s", exc)
         return False
     finally:
         if ser and ser.is_open:
