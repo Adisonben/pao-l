@@ -165,6 +165,8 @@ export function useMockKiosk(mode = "dev") {
     return null;
   }, [mode, setConnected, emitState, emitResult, clearResult, resetState, startTimeline]);
 
+  const clearResetResult = useCallback(() => setResetResult(null), []);
+
   return {
     wsConnected,
     sensorState,
@@ -173,6 +175,7 @@ export function useMockKiosk(mode = "dev") {
     resetResult,
     lastEvent,
     sendCommand,
+    clearResetResult,
     mockControls,
   };
 }

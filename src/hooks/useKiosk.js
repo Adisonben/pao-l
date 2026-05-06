@@ -132,6 +132,8 @@ export function useKiosk() {
     }
   }, []);
 
+  const clearResetResult = useCallback(() => setResetResult(null), []);
+
   return {
     wsConnected,
     sensorState,
@@ -140,5 +142,6 @@ export function useKiosk() {
     resetResult,
     lastEvent,
     sendCommand,
+    clearResetResult,
   };
 }

@@ -53,11 +53,12 @@ export default function ResultPanel({
   const isManual = Boolean(manualMessage);
   const tier = getAlcoholLevel(value);
   const { playSound } = useGlobalSound();
-  const { sendCommand, resetResult } = useKioskContext();
+  const { sendCommand, resetResult, clearResetResult } = useKioskContext();
   const [elapsedTime, setElapsedTime] = useState(0);
 
-  // Send RESET_SENSOR on mount
+  // Clear stale reset state and send RESET_SENSOR on mount
   useEffect(() => {
+    clearResetResult();
     sendCommand("RESET_SENSOR");
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -66,7 +67,10 @@ export default function ResultPanel({
   useEffect(() => {
     if (!resetResult?.success || elapsedTime < MIN_DISPLAY_SECONDS) return;
     if (onDone) onDone();
-    else router.push("/");
+    else {
+      console.log("Reset success, elapsedTime : ", elapsedTime);
+      router.push("/")
+    };
   }, [resetResult, elapsedTime, onDone, router]);
 
   // Elapsed time display timer
