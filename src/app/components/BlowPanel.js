@@ -71,7 +71,7 @@ export default function BlowPanel({ sensorState }) {
       {/* ── HEADER ── */}
       <div className="flex flex-col items-center gap-1 px-4 xl:px-8 pt-4 xl:pt-10">
         <button
-          onClick={() => router.push("/")}
+          onClick={() => { sendCommand("RESET_SENSOR"); router.push("/"); }}
           className="mb-2 xl:mb-4 flex items-center gap-1 self-start text-xs text-zinc-600 transition-colors hover:text-zinc-400"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width={14} height={14} viewBox="0 0 24 24"

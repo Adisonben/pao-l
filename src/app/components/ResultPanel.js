@@ -93,7 +93,7 @@ export default function ResultPanel({
       {/* ── HEADER ── */}
       <div className="flex flex-col items-center gap-1 px-4 pt-2">
         <button
-          onClick={() => router.push("/")}
+          onClick={() => { sendCommand("RESET_SENSOR"); router.push("/"); }}
           className=" flex items-center gap-1 self-start text-xs text-zinc-600 transition-colors hover:text-zinc-400"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width={14} height={14} viewBox="0 0 24 24"
