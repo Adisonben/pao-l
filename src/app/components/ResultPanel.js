@@ -61,12 +61,13 @@ export default function ResultPanel({
     sendCommand("RESET_SENSOR");
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Redirect when backend confirms reset success
+  // Redirect when backend confirms success AND at least 10s have passed
+  const MIN_DISPLAY_SECONDS = 10;
   useEffect(() => {
-    if (!resetResult?.success) return;
+    if (!resetResult?.success || elapsedTime < MIN_DISPLAY_SECONDS) return;
     if (onDone) onDone();
     else router.push("/");
-  }, [resetResult, onDone, router]);
+  }, [resetResult, elapsedTime, onDone, router]);
 
   // Elapsed time display timer
   useEffect(() => {
