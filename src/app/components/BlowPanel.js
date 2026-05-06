@@ -36,7 +36,7 @@ export function sensorStateToPhase(sensorState) {
   }
 }
 
-export default function BlowPanel({ sensorState, errorAttempt = null, maxRetry = 0 }) {
+export default function BlowPanel({ sensorState }) {
   const router = useRouter();
   const { playSound } = useGlobalSound();
   const { sendCommand } = useKioskContext();
@@ -130,17 +130,6 @@ export default function BlowPanel({ sensorState, errorAttempt = null, maxRetry =
             >
               {current.description}
             </motion.p>
-            {errorAttempt !== null ? (
-              <motion.p
-                key="hint-error"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="text-xs text-red-400"
-              >
-                เชื่อมต่อใหม่ (ครั้งที่ {errorAttempt}{maxRetry ? `/${maxRetry}` : ""})
-              </motion.p>
-            ) : null}
           </AnimatePresence>
         </div>
 
