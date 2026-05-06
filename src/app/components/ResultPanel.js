@@ -54,49 +54,26 @@ export default function ResultPanel({
   const tier = getAlcoholLevel(value);
   const { playSound } = useGlobalSound();
   const { sendCommand, resetResult } = useKioskContext();
-  const [countdown, setCountdown] = useState(10);
   const [elapsedTime, setElapsedTime] = useState(0);
-  const [resetSucceeded, setResetSucceeded] = useState(false);
 
   // Send RESET_SENSOR on mount
   useEffect(() => {
     sendCommand("RESET_SENSOR");
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Track reset success from backend
+  // Redirect when backend confirms reset success
   useEffect(() => {
-    if (!resetResult) return;
-    if (resetResult.success) {
-      setResetSucceeded(true);
-    } else {
-      // Reset failed — retry
-      console.warn("[ResultPanel] Reset failed, retrying...");
-      sendCommand("RESET_SENSOR");
-    }
-  }, [resetResult, sendCommand]);
+    if (!resetResult?.success) return;
+    if (onDone) onDone();
+    else router.push("/");
+  }, [resetResult, onDone, router]);
 
-  // Countdown logic: 10s initially, then 5s loops until reset success
+  // Elapsed time display timer
   useEffect(() => {
     if (isManual) return;
-
-    if (countdown > 0) {
-      const timer = setTimeout(() => {
-        setCountdown((c) => c - 1);
-        setElapsedTime((e) => e + 1);
-      }, 1000);
-      return () => clearTimeout(timer);
-    } else {
-      // Check for success when countdown hits 0
-      if (resetSucceeded) {
-        if (onDone) onDone();
-        else router.push("/");
-      } else {
-        // Still not ready, wait another 5 seconds
-        setCountdown(5);
-        // Note: we continue incrementing elapsedTime via the next countdown cycle
-      }
-    }
-  }, [countdown, resetSucceeded, isManual, onDone, router]);
+    const timer = setInterval(() => setElapsedTime((e) => e + 1), 1000);
+    return () => clearInterval(timer);
+  }, [isManual]);
 
   // Play result sound
   useEffect(() => {
